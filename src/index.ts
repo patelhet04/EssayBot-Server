@@ -28,7 +28,7 @@ app.use("/api", routes);
 
 app.get("/list-models", (req: Request, res: Response, next: Function) => {
   axios
-    .get("http://localhost:5001/api/tags")
+    .get("http://localhost:5000/api/tags")
     .then((response: any) => {
       res
         .status(200)

@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 rubric_bp = Blueprint("rubric", __name__)
 
 # Local LLM API configuration
-API_URL = "http://localhost:5001/api/generate"
+API_URL = "http://localhost:5000/api/generate"
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_TOP_P = 0.9
 DEFAULT_MAX_TOKENS = 4000

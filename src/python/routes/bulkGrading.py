@@ -45,7 +45,7 @@ class GradingProgress:
 bulkGrading_bp = Blueprint("bulkGrading", __name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5001/api/generate"
+LLM_API_URL = "http://localhost:5000/api/generate"
 s3_client = boto3.client(
     "s3",
     endpoint_url=os.getenv("MINIO_ENDPOINT", "http://127.0.0.1:9000"),
