@@ -26,6 +26,16 @@ app.use(
 
 app.use("/api", routes);
 
+// Health check endpoint
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Express.js server is running",
+    timestamp: new Date().toISOString(),
+    port: PORT,
+  });
+});
+
 app.get("/list-models", (req: Request, res: Response, next: Function) => {
   axios
     .get("http://localhost:5000/api/tags")
