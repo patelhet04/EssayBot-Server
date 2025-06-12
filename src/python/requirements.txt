@@ -16,3 +16,4 @@ numpy
 routes
 aiohttp
 asyncio
+flask_cors
