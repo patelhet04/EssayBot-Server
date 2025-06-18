@@ -7,6 +7,7 @@ import userRoutes from "./userRoutes";
 import attachmentRoutes from "./attachmentRoutes";
 import gradingRoutes from "./gradingRoutes";
 import reportsRoutes from "./reportsRoute";
+import modelsRoutes from "./modelsRoutes";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use("/users", userRoutes);
 router.use("/attachments", attachmentRoutes);
 router.use("/grading", gradingRoutes);
 router.use("/reports", reportsRoutes);
+router.use("/", modelsRoutes);
 
 export default router;

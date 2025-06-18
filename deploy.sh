@@ -46,8 +46,8 @@ fi
 
 # Stop existing processes
 echo "🔄 Restarting services..."
-pm2 stop all || true
-pm2 delete all || true
+pm2 stop  essaybot-express && pm2 delete essaybot-express || true
+pm2 stop  essaybot-flask && pm2 delete essaybot-flask || true
 
 # Start applications with simple PM2 commands
 echo "🚀 Starting applications..."
