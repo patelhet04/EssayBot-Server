@@ -45,7 +45,6 @@ if [ -f "nginx.conf" ]; then
 fi
 
 # Stop existing processes
-# essaybot-express, essaybot-flask
 echo "🔄 Restarting services..."
 pm2 stop all || true
 pm2 delete all || true
