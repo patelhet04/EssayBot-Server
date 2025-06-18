@@ -49,9 +49,16 @@ echo "🔄 Restarting services..."
 pm2 stop all || true
 pm2 delete all || true
 
-# Start all applications using ecosystem configuration
-echo "🚀 Starting applications with ecosystem config..."
-pm2 start ecosystem.config.js
+# Start applications with simple PM2 commands
+echo "🚀 Starting applications..."
+
+# Start Express.js with simple command
+echo "Starting Express.js on port 8000..."
+PORT=8000 pm2 start "npx ts-node src/index.ts" --name essaybot-express
+
+# Start Flask with original working config style
+echo "Starting Flask on port 6000..."
+FLASK_PORT=6000 pm2 start src/python/app.py --name essaybot-flask --interpreter src/python/venv/bin/python
 
 # Save PM2 configuration
 pm2 save

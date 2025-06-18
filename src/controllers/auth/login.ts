@@ -29,12 +29,11 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     // Set token in HttpOnly, Secure cookie
     res.cookie("authToken", token, {
       httpOnly: true, // Prevents JavaScript access (XSS protection)
-      secure: process.env.NODE_ENV === "production", // Ensures cookie is sent only over HTTPS in production
-      sameSite: "strict", // Prevents CSRF attacks
+      secure: false, // Ensures cookie is sent only over HTTPS in production
+      sameSite: "lax", // Prevents CSRF attacks
       maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
       path: "/",
     });
-
     res.json({ message: "Login successful", userId: user._id });
   } catch (error) {
     console.log({ error });

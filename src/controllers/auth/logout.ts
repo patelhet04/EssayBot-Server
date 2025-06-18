@@ -5,11 +5,12 @@ export const logoutUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    // Clear the JWT token cookie
+    // Clear the JWT token cookie - MUST match login cookie settings exactly
     res.clearCookie("authToken", {
       httpOnly: true,
-      secure: true, // Ensure this matches the cookie settings used in login
-      sameSite: "strict",
+      secure: false, // Match login: secure is false
+      sameSite: "lax", // Match login: sameSite is lax
+      path: "/", // Match login: path is "/"
     });
 
     res.status(200).json({ message: "Logout successful" });

@@ -4,7 +4,6 @@ import routes from "./routes/routes";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import axios from "axios";
 
 dotenv.config();
 
@@ -34,26 +33,6 @@ app.get("/health", (req: Request, res: Response) => {
     timestamp: new Date().toISOString(),
     port: PORT,
   });
-});
-
-app.get("/list-models", (req: Request, res: Response, next: Function) => {
-  axios
-    .get("http://localhost:5000/api/tags")
-    .then((response: any) => {
-      res
-        .status(200)
-        .json(
-          response.data.models
-            .map((model: any) => model.name)
-            .filter((name: string) => !name.toLowerCase().includes("deepseek"))
-        );
-    })
-    .catch((error) => {
-      res.status(500).json({
-        message: "Failed to list models",
-        error: error.message,
-      });
-    });
 });
 
 connectDB();
