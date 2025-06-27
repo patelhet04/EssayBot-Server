@@ -6,7 +6,7 @@ import requests
 from typing import List, Dict, Any
 from flask import Flask, request, jsonify, Blueprint
 
-from .rag_pipeline import retrieve_relevant_text, get_faiss_index_from_s3
+from .rag_pipeline import retrieve_relevant_text
 
 # Set up logging
 logging.basicConfig(
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 rubric_bp = Blueprint("rubric", __name__)
 
 # Local LLM API configuration
-API_URL = "http://localhost:5000/api/generate"
+API_URL = "http://localhost:5001/api/generate"
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_TOP_P = 0.9
 DEFAULT_MAX_TOKENS = 4000
@@ -96,7 +96,7 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
 
         Return ONLY the JSON object with no additional text before or after it.
         """
-        response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.9,
+        response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
                                      max_tokens=1000, model=model)
         response = response.strip()
         json_start = response.find('{')

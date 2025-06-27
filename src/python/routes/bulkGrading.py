@@ -45,7 +45,7 @@ class GradingProgress:
 bulkGrading_bp = Blueprint("bulkGrading", __name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5000/api/generate"
+LLM_API_URL = "http://localhost:5001/api/generate"
 s3_client = boto3.client(
     "s3",
     endpoint_url=os.getenv("MINIO_ENDPOINT", "http://127.0.0.1:9000"),
@@ -60,7 +60,7 @@ MINIO_ENDPOINT = os.getenv("MINIO_ENDPOINT", "http://127.0.0.1:9000")
 
 def send_post_request_sync(
     prompt: str,
-    temperature: float = 0.7,
+    temperature: float = 0.2,
     top_p: float = 0.9,
     max_tokens: int = 2048,
     model: str = DEFAULT_MODEL
@@ -102,32 +102,84 @@ def grade_essay_sync(
     Returns feedback and scores for each agent (criterion).
     """
     try:
-        # Step 1: Retrieve RAG context for grading
+        # Step 1 & 2: Optimized single initialization for both essay analysis and RAG
+        retrieval_engine = None
         try:
-            rag_chunks = retrieve_relevant_text(
-                query=question,  # Use the question as the query for RAG
-                professor_username=professor_username,
-                course_id=course_id,
-                assignmentTitle=assignment_title,
-                k=RAG_K,
-                distance_threshold=RAG_DISTANCE_THRESHOLD,
-                max_total_length=RAG_MAX_TOTAL_LENGTH
+            from llamaindex_rag.llamaindex_retrieval import RetrievalEngine
+            from llamaindex_rag.llamaindex_core import RAGPipelineCore
+
+            # ⚡ OPTIMIZED: Initialize retrieval engine ONCE for both essay analysis and RAG
+            rag_core = RAGPipelineCore()
+            retrieval_engine = RetrievalEngine(rag_core)
+
+            # Load documents and train query processor (ONCE)
+            vector_index, nodes_data = retrieval_engine._load_index_and_nodes_fixed(
+                professor_username, course_id, assignment_title
             )
-            rag_context = "\n".join(
-                rag_chunks) if rag_chunks else "No relevant context available."
+            document_texts = [node["text"] for node in nodes_data]
+            retrieval_engine.query_processor.learn_from_documents(
+                document_texts)
+
+            # Analyze student's essay for quality/relevance
+            essay_analysis = retrieval_engine.query_processor.analyze_query(
+                essay)
+            specificity_score = essay_analysis.specificity_score
+            quality_multiplier = essay_analysis.similarity_boost
+
+            logger.info(f"🎯 BULK ESSAY ANALYSIS - Text: '{essay[:50]}...'")
+            logger.info(
+                f"🎯 BULK ESSAY ANALYSIS - Specificity: {specificity_score:.3f}, Multiplier: {quality_multiplier:.2f}")
+
+            # Conditional RAG retrieval using SAME retrieval engine (no duplicate initialization!)
+            if specificity_score < 0.1:  # Skip RAG for gibberish responses
+                rag_context = "No context provided due to irrelevant response."
+                logger.info(
+                    f"⚠️ SKIPPING RAG RETRIEVAL - Essay {progress.current_essay_index + 1} too irrelevant (specificity: {specificity_score:.3f})")
+            else:
+                # Use the ALREADY INITIALIZED retrieval engine for RAG
+                rag_results = retrieval_engine.retrieve(
+                    query=question,
+                    professor_username=professor_username,
+                    course_id=course_id,
+                    assignment_title=assignment_title,
+                    top_k=RAG_K
+                )
+
+                if rag_results['total_results'] > 0:
+                    # Limit total context length
+                    rag_chunks = []
+                    total_length = 0
+                    for result in rag_results['results']:
+                        chunk_text = result['text']
+                        if total_length + len(chunk_text) > RAG_MAX_TOTAL_LENGTH:
+                            break
+                        rag_chunks.append(chunk_text)
+                        total_length += len(chunk_text)
+                    rag_context = "\n".join(rag_chunks)
+                else:
+                    rag_context = "No relevant context available."
+
+                logger.info(
+                    f"📖 RAG context retrieved for essay {progress.current_essay_index + 1}/{progress.total_essays}")
+
         except Exception as e:
-            logger.error(f"Failed to retrieve RAG context: {str(e)}")
-            rag_context = "No relevant context available due to retrieval error."
+            logger.warning(
+                f"Smart analysis/RAG failed, using default scoring: {e}")
+            specificity_score = 0.5
+            quality_multiplier = 1.0
+            rag_context = "No context available due to analysis error."
 
-        logger.info(
-            f"RAG context retrieved for essay {progress.current_essay_index + 1}/{progress.total_essays}")
-
-        # Step 2: Assemble the prompts using get_prompt from agents.py
-        assembled_prompts = get_prompt(config_prompt, tone=tone)
+        # Step 3: Assemble the prompts using get_prompt from agents.py (with quality awareness)
+        assembled_prompts = get_prompt(
+            config_prompt,
+            tone=tone,
+            quality_multiplier=quality_multiplier,
+            specificity_score=specificity_score
+        )
         if not assembled_prompts or "criteria_prompts" not in assembled_prompts:
             raise ValueError("Failed to assemble prompts")
 
-        # Step 3: Grade the essay for each criterion (agent)
+        # Step 4: Grade the essay for each criterion (agent)
         grading_results = {}
         for criterion_name, prompt_data in assembled_prompts["criteria_prompts"].items():
             # Replace placeholders in the prompt
@@ -149,10 +201,30 @@ def grade_essay_sync(
                             "feedback": "Invalid grading response format"
                         }
                         continue
+
+                    # Apply quality multiplier to the score
+                    original_score = result["score"]
+                    adjusted_score = max(
+                        0, min(100, original_score * quality_multiplier))
+
+                    # Add quality analysis to feedback if significantly different
+                    feedback = result["feedback"]
+                    if quality_multiplier < 0.9:
+                        feedback += f" [Note: Response quality suggests limited engagement with course material. Score adjusted for relevance.]"
+                    elif quality_multiplier > 1.1:
+                        feedback += f" [Note: Response demonstrates strong engagement with course concepts.]"
+
                     grading_results[criterion_name] = {
-                        "score": result["score"],
-                        "feedback": result["feedback"]
+                        "score": round(adjusted_score, 1),
+                        "feedback": feedback,
+                        "original_score": original_score,
+                        "quality_multiplier": quality_multiplier,
+                        "specificity_score": specificity_score
                     }
+
+                    logger.info(
+                        f"Criterion {criterion_name}: {original_score} -> {adjusted_score:.1f} (x{quality_multiplier:.2f})")
+
                 except json.JSONDecodeError as e:
                     logger.error(
                         f"Failed to parse LLM grading response for criterion: {criterion_name}, error: {str(e)}")

@@ -5,7 +5,7 @@ const router = express.Router();
 
 // GET /api/list-models - Get list of available models from Ollama (filtered by parameter size ≤ 16B)
 router.get("/list-models", (req: Request, res: Response) => {
-  const ollamaUrl = process.env.OLLAMA_URL || "http://localhost:5000";
+  const ollamaUrl = process.env.OLLAMA_URL || "http://localhost:5001";
 
   axios
     .get(`${ollamaUrl}/api/tags`)

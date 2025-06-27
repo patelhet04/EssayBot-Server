@@ -1,3 +1,4 @@
+# Existing dependencies (keep these)
 pandas
 pdfplumber
 langchain
@@ -17,3 +18,19 @@ routes
 aiohttp
 asyncio
 flask_cors
+
+
+llama-index>=0.12.0
+llama-index-core>=0.12.0
+llama-index-embeddings-huggingface>=0.2.0
+llama-index-vector-stores-faiss>=0.1.2
+llama-index-readers-file>=0.1.4
+
+# NEW: Additional PDF processing libraries
+PyMuPDF==1.23.26
+PyPDF2==3.0.1
+scikit-learn
+
+# NEW: Enhanced utilities
+typing-extensions>=4.5.0
+dataclasses-json>=0.6.0

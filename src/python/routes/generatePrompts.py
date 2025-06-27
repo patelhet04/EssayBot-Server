@@ -16,10 +16,10 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5000/api/generate"
+LLM_API_URL = "http://localhost:5001/api/generate"
 
 
-def send_post_request(prompt, temperature=0.3, top_p=0.9, max_tokens=2048, model="llama3.1:8b"):
+def send_post_request(prompt, temperature=0.3, top_p=0.1, max_tokens=2048, model="llama3.1:8b"):
     """Send a request to the remote LLM API."""
     payload = {
         "model": model,
@@ -53,27 +53,28 @@ def generate_criterion_prompt(criterion, agent_index, model):
         str: The generated prompt as a JSON string, or None if failed.
     """
     llm_instruction = f"""
-You are an expert prompt engineer. Generate evaluation instructions for a single criterion of an essay. The instructions should:
-- Be directly related to the criterion '{criterion['name']}' and help assess how well the essay meets this criterion.
-- Be specific, clear, and actionable, providing precise guidance on what to look for in the essay.
-- Be concise and limited to 4-5 bullet points.
-- Avoid vague or generic statements; focus on aspects unique to this criterion.
-- **Do NOT include** the header or introduction; they will be added programmatically.
+You are an expert prompt engineer. Generate 2-3 focused evaluation points for the criterion '{criterion['name']}'. 
 
-Criterion JSON: {json.dumps(criterion)}
+Requirements:
+- Each point should be ONE specific thing to check in the essay
+- Use simple, direct language (avoid complex phrasing)
+- Focus ONLY on this criterion, not general essay quality
+- Keep each instruction under 15 words
 
-Return a JSON object with the following structure:
+Criterion: {json.dumps(criterion)}
+
+Return JSON format:
 {{
   "instructions": [
-    "<instruction 1>",
-    "<instruction 2>",
-    ...
+    "<check 1>",
+    "<check 2>",
+    "<check 3>"
   ]
 }}
 """
 
     response = send_post_request(
-        llm_instruction, temperature=0.5, top_p=0.8, max_tokens=2048, model=model)
+        llm_instruction, temperature=0.3, top_p=0.1, max_tokens=2048, model=model)
     if response and "response" in response:
         try:
             result = json.loads(response["response"])
@@ -82,18 +83,18 @@ Return a JSON object with the following structure:
                     f"Invalid response format from LLM for criterion: {criterion['name']}")
                 return None
 
-            # Ensure the instructions are limited to 4-5
-            if len(result["instructions"]) > 5:
-                result["instructions"] = result["instructions"][:5]
-            elif len(result["instructions"]) < 4:
+            # Ensure the instructions are limited to 2-3 (simplified)
+            if len(result["instructions"]) > 3:
+                result["instructions"] = result["instructions"][:3]
+            elif len(result["instructions"]) < 2:
                 logger.warning(
-                    f"LLM generated fewer than 4 instructions for criterion: {criterion['name']}")
-                # Optionally, we could add default instructions to reach 4, but for now, we'll accept what the LLM provides
+                    f"LLM generated fewer than 2 instructions for criterion: {criterion['name']}")
+                # Accept what the LLM provides, even if fewer than expected
 
             # Construct the prompt as a JSON object
             prompt_data = {
-                "header": f"### **Agent {agent_index}: {criterion['name']} (Max Score: {criterion['weight']})**",
-                "introduction": f"To evaluate the essay for '{criterion['name']}', consider the following aspects:",
+                "header": f"**{criterion['name']} (Max: {criterion['weight']} points)**",
+                "introduction": f"Check if the essay meets these requirements:",
                 "instructions": result["instructions"]
             }
 
