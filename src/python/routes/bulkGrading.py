@@ -102,15 +102,13 @@ def grade_essay_sync(
     Returns feedback and scores for each agent (criterion).
     """
     try:
-        # Step 1 & 2: Optimized single initialization for both essay analysis and RAG
+        # Step 1 & 2: PERMANENT FIX - Use global singleton for caching
         retrieval_engine = None
         try:
-            from llamaindex_rag.llamaindex_retrieval import RetrievalEngine
-            from llamaindex_rag.llamaindex_core import RAGPipelineCore
+            from llamaindex_rag.llamaindex_retrieval import get_retrieval_engine
 
-            # ⚡ OPTIMIZED: Initialize retrieval engine ONCE for both essay analysis and RAG
-            rag_core = RAGPipelineCore()
-            retrieval_engine = RetrievalEngine(rag_core)
+            # ⚡ PERMANENT FIX: Use global singleton - no more downloads every request!
+            retrieval_engine = get_retrieval_engine()
 
             # Load documents and train query processor (ONCE)
             vector_index, nodes_data = retrieval_engine._load_index_and_nodes_fixed(

@@ -58,12 +58,6 @@ class DynamicQueryProcessor:
             elif frequency_ratio > 0.05:  # Appears in >5% of text
                 self.common_terms.add(term)
 
-        print(f"📚 Learned from documents:")
-        print(f"   Total vocabulary: {len(self.document_vocabulary)} terms")
-        print(f"   Rare (specific) terms: {len(self.rare_terms)}")
-        print(f"   Common terms: {len(self.common_terms)}")
-        print(f"   Bigrams: {len(self.document_bigrams)}")
-
     def analyze_query(self, query: str) -> QueryAnalysis:
         """Analyze query specificity based on learned document content."""
         query_lower = query.lower()
@@ -191,13 +185,6 @@ class SmartRetrievalEngine:
         processed_query, similarity_boost = self.query_processor.process_query_for_retrieval(
             query)
         analysis = self.query_processor.analyze_query(query)
-
-        print(f"🔍 Query Analysis:")
-        print(f"   Original: {query[:60]}...")
-        print(f"   Type: {analysis.query_type}")
-        print(f"   Specificity: {analysis.specificity_score:.3f}")
-        print(f"   Boost: {similarity_boost:.2f}x")
-        print(f"   Expand: {analysis.should_expand}")
 
         # Perform retrieval
         results = retrieval_function(processed_query, **kwargs)

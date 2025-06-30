@@ -450,9 +450,9 @@ if __name__ == "__main__":
 
         # Perform health check
         health = pipeline_core.health_check()
-        print("Health Check Results:")
+        logger.info("Health Check Results:")
         for key, value in health.items():
-            print(f"  {key}: {value}")
+            logger.info(f"  {key}: {value}")
 
         logger.info("RAG Pipeline Core setup completed successfully")
 

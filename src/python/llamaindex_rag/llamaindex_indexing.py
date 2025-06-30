@@ -406,7 +406,7 @@ if __name__ == "__main__":
 
         # Test health check
         health = indexer.health_check()
-        print(f"Health Status: {health['status']}")
+        logger.info(f"Health Status: {health['status']}")
 
         # Test single document indexing
         result = indexer.index_document(
@@ -416,12 +416,12 @@ if __name__ == "__main__":
             assignment_title="test_assignment"
         )
 
-        print(f"Indexing Result: {result.success}")
+        logger.info(f"Indexing Result: {result.success}")
         if result.success:
-            print(
+            logger.info(
                 f"Processed {result.total_nodes} nodes in {result.processing_time:.2f}s")
         else:
-            print(f"Error: {result.error_message}")
+            logger.error(f"Error: {result.error_message}")
 
     except Exception as e:
         logger.error(f"Test failed: {str(e)}")

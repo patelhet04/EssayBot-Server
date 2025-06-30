@@ -199,23 +199,10 @@ class RetrievalEngine:
                 professor_username, course_id, assignment_title
             )
 
-            # Enhance query with SMART processing (no static expansions)
+            # Enhance query with SMART processing
             if self.config.enable_query_expansion:
                 enhanced_query, similarity_boost = self.query_processor.process_query_for_retrieval(
                     query)
-
-                # Debug: Show query analysis
-                analysis = self.query_processor.analyze_query(query)
-                logger.info(f"🔍 Query Analysis:")
-                logger.info(f"   Original: {query[:60]}...")
-                logger.info(f"   Type: {analysis.query_type}")
-                logger.info(
-                    f"   Specificity: {analysis.specificity_score:.3f}")
-                logger.info(f"   Boost: {similarity_boost:.2f}x")
-                logger.info(
-                    f"   Content Overlap: {analysis.content_overlap_score:.3f}")
-                logger.info(
-                    f"   Term Rarity: {analysis.term_rarity_score:.3f}")
             else:
                 enhanced_query = query
                 similarity_boost = 1.0
@@ -226,8 +213,15 @@ class RetrievalEngine:
             elif mode == RetrievalMode.KEYWORD_ONLY:
                 results = self._keyword_retrieve(nodes_data, enhanced_query)
             elif mode == RetrievalMode.HYBRID:
-                results = self._hybrid_retrieve(
-                    vector_index, nodes_data, enhanced_query)
+                # Fallback to keyword-only if vector retrieval fails
+                try:
+                    results = self._hybrid_retrieve(
+                        vector_index, nodes_data, enhanced_query)
+                except Exception:
+                    logger.warning(
+                        "Vector retrieval failed, falling back to keyword-only")
+                    results = self._keyword_retrieve(
+                        nodes_data, enhanced_query)
             elif mode == RetrievalMode.ADAPTIVE:
                 results = self._adaptive_retrieve(
                     vector_index, nodes_data, query, enhanced_query)
@@ -255,8 +249,6 @@ class RetrievalEngine:
                 }
             }
 
-            logger.info(
-                f"Retrieved {len(processed_results)} results for query: {query[:50]}...")
             return response
 
         except Exception as e:
@@ -287,10 +279,7 @@ class RetrievalEngine:
 
         # Check cache first
         if cache_key in self._index_cache and cache_key in self._nodes_cache:
-            logger.info(
-                f"⚡ Using in-memory cached index for {cache_key} (0ms)")
             return self._index_cache[cache_key], self._nodes_cache[cache_key]
-
         try:
             load_start = time.time()
 
@@ -301,7 +290,6 @@ class RetrievalEngine:
 
             # Download nodes data
             nodes_data = self.core.s3_manager.download_json(nodes_key)["nodes"]
-            logger.info(f"📄 Downloaded {len(nodes_data)} nodes from S3")
 
             # LEARN FROM DOCUMENT CONTENT (no static word lists!)
             document_texts = [node["text"] for node in nodes_data]
@@ -325,17 +313,11 @@ class RetrievalEngine:
 
                 text_nodes.append(text_node)
 
-            # Load pre-computed FAISS index from S3 (PROPER APPROACH)
+            # Load pre-computed FAISS index from S3
             index_key = f"{base_path}/faiss_index.index"
-            logger.info(
-                f"Loading pre-computed FAISS index from S3: {index_key}")
-
-            # Download and load FAISS index
             with temporary_file(suffix=".index") as temp_index_path:
                 self.core.s3_manager.download_file(index_key, temp_index_path)
                 faiss_index = faiss.read_index(temp_index_path)
-                logger.info(
-                    f"✅ Loaded FAISS index with {faiss_index.ntotal} vectors")
 
                 # Create vector store from existing FAISS index
             vector_store = FaissVectorStore(faiss_index=faiss_index)
@@ -347,8 +329,6 @@ class RetrievalEngine:
                 nodes=text_nodes,
                 storage_context=storage_context
             )
-            logger.info(
-                "✅ Created VectorStoreIndex using pre-computed embeddings")
 
             # Build keyword index
             self.keyword_retriever.build_index(nodes_data)
@@ -357,11 +337,6 @@ class RetrievalEngine:
             self._index_cache[cache_key] = vector_index
             self._nodes_cache[cache_key] = nodes_data
 
-            total_time = time.time() - load_start
-            logger.info(
-                f"🚀 Successfully loaded VectorStoreIndex with {len(text_nodes)} nodes in {total_time:.2f}s")
-            logger.info(
-                f"⚡ Performance: Used pre-computed embeddings (vs ~{len(text_nodes)*0.8:.1f}s if recreating)")
             return vector_index, nodes_data
 
         except Exception as e:
@@ -379,16 +354,6 @@ class RetrievalEngine:
             # Perform retrieval
             retrieved_nodes = retriever.retrieve(QueryBundle(query_str=query))
 
-            # DEBUG: Log all retrieved nodes with scores
-            logger.info(f"🔍 RAG RETRIEVAL DEBUG - Query: '{query[:60]}...'")
-            logger.info(f"🔍 Total nodes retrieved: {len(retrieved_nodes)}")
-
-            for i, node_with_score in enumerate(retrieved_nodes):
-                score = node_with_score.score if node_with_score.score is not None else 0.0
-                text_preview = node_with_score.node.get_content()[:100] + "..."
-                logger.info(
-                    f"🔍 Node {i+1}: Score={score:.4f}, Content='{text_preview}'")
-
             # Filter by similarity threshold
             filtered_nodes = []
             for node_with_score in retrieved_nodes:
@@ -397,9 +362,6 @@ class RetrievalEngine:
 
                 if len(filtered_nodes) >= self.config.similarity_top_k:
                     break
-
-            logger.info(
-                f"🔍 Nodes after filtering (cutoff={self.config.similarity_cutoff}): {len(filtered_nodes)}")
 
             return filtered_nodes
 
@@ -433,6 +395,24 @@ class RetrievalEngine:
         # Get keyword results
         keyword_results = self._keyword_retrieve(nodes_data, query)
 
+        # If vector search failed but keyword search has results, use keyword-only
+        if not vector_results and keyword_results:
+            logger.info("Vector search failed, using keyword-only results")
+            # Convert keyword results to NodeWithScore format
+            keyword_nodes = []
+            for keyword_result in keyword_results[:self.config.similarity_top_k]:
+                # Create a simple TextNode
+                text_node = TextNode(
+                    text=keyword_result["text"],
+                    metadata=keyword_result.get("metadata", {}),
+                    id_=keyword_result.get("node_id", "keyword_node")
+                )
+                # Create NodeWithScore
+                node_with_score = NodeWithScore(
+                    node=text_node, score=keyword_result["score"])
+                keyword_nodes.append(node_with_score)
+            return keyword_nodes
+
         # Simple fusion: prioritize vector results, supplement with keyword
         all_results = {}
 
@@ -451,7 +431,6 @@ class RetrievalEngine:
             node_id = keyword_result["node_id"]
             if node_id in all_results:
                 all_results[node_id]["keyword_score"] = keyword_result["score"]
-            # Note: Skip keyword-only results for now to keep NodeWithScore format
 
         # Calculate hybrid scores and sort
         final_results = []
@@ -604,6 +583,89 @@ class RetrievalEngine:
         logger.info("Retrieval engine cache cleared")
 
 
+# Global singleton instance
+_retrieval_engine_instance = None
+_retrieval_engine_lock = None
+
+
+def get_retrieval_engine() -> 'RetrievalEngine':
+    """Get or create the global RetrievalEngine singleton instance."""
+    global _retrieval_engine_instance, _retrieval_engine_lock
+
+    if _retrieval_engine_lock is None:
+        import threading
+        _retrieval_engine_lock = threading.Lock()
+
+    if _retrieval_engine_instance is None:
+        with _retrieval_engine_lock:
+            # Double-check locking pattern
+            if _retrieval_engine_instance is None:
+                from .llamaindex_core import RAGPipelineCore
+                logger.info(
+                    "🔄 Creating global RetrievalEngine singleton instance")
+                rag_core = RAGPipelineCore()
+                _retrieval_engine_instance = RetrievalEngine(rag_core)
+                logger.info(
+                    "✅ Global RetrievalEngine singleton instance created")
+
+    return _retrieval_engine_instance
+
+
+def clear_global_retrieval_cache():
+    """Clear the global retrieval cache (for testing/debugging)."""
+    global _retrieval_engine_instance
+    if _retrieval_engine_instance:
+        _retrieval_engine_instance.clear_cache()
+        logger.info("🧹 Global retrieval cache cleared")
+
+
+def warm_up_cache(assignments: List[Dict[str, str]]) -> Dict[str, Any]:
+    """Pre-load cache with specified assignments at startup."""
+    retrieval_engine = get_retrieval_engine()
+    results = {"total_assignments": len(
+        assignments), "successful": 0, "failed": 0}
+
+    for assignment in assignments:
+        try:
+            retrieval_engine._load_index_and_nodes_fixed(
+                assignment["professor_username"],
+                assignment["course_id"],
+                assignment["assignment_title"]
+            )
+            results["successful"] += 1
+        except Exception:
+            results["failed"] += 1
+
+    if results["successful"] > 0:
+        logger.info(f"Cache pre-loaded: {results['successful']} assignments")
+    return results
+
+
+def warm_up_from_env() -> Dict[str, Any]:
+    """Load assignments from environment variables for cache warmup."""
+    import os
+
+    warmup_config = os.getenv("WARMUP_ASSIGNMENTS", "")
+    if not warmup_config:
+        return {"total_assignments": 0, "successful": 0, "failed": 0}
+
+    assignments = []
+    try:
+        for assignment_str in warmup_config.split(";"):
+            if assignment_str.strip():
+                parts = assignment_str.strip().split(",")
+                if len(parts) == 3:
+                    assignments.append({
+                        "professor_username": parts[0].strip(),
+                        "course_id": parts[1].strip(),
+                        "assignment_title": parts[2].strip()
+                    })
+    except Exception:
+        return {"total_assignments": 0, "successful": 0, "failed": 1}
+
+    return warm_up_cache(assignments) if assignments else {"total_assignments": 0, "successful": 0, "failed": 0}
+
+
 # Example usage and testing
 if __name__ == "__main__":
     from llamaindex_core import RAGPipelineCore
@@ -623,15 +685,8 @@ if __name__ == "__main__":
             top_k=5
         )
 
-        print("Retrieval Results:")
-        print(f"Query: {results['query']}")
-        print(f"Enhanced Query: {results['enhanced_query']}")
-        print(f"Total Results: {results['total_results']}")
-        print(f"Retrieval Time: {results['retrieval_time']:.3f}s")
-
-        for i, result in enumerate(results['results'][:3]):
-            print(f"\nResult {i+1} (Score: {result['score']:.3f}):")
-            print(f"Text: {result['text'][:200]}...")
+        logger.info(
+            f"Test retrieval completed: {results['total_results']} results")
 
     except Exception as e:
         logger.error(f"Test failed: {str(e)}")

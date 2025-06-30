@@ -33,13 +33,14 @@ logger = logging.getLogger(__name__)
 
 # Initialize LlamaIndex RAG system
 llamaindex_indexer = None
-rag_core = None
 
 if LLAMAINDEX_AVAILABLE:
     try:
-        rag_core = RAGPipelineCore()
         llamaindex_indexer = LlamaIndexIndexer()
         logger.info("🚀 LlamaIndex RAG system initialized successfully")
+        logger.info(
+            "🚀 RetrievalEngine will use singleton pattern for optimal caching")
+
     except Exception as e:
         logger.error(f"❌ Failed to initialize LlamaIndex RAG system: {e}")
         LLAMAINDEX_AVAILABLE = False
@@ -160,10 +161,10 @@ def retrieve_relevant_text(query: str, k: int = 10, professor_username: str = No
             "professor_username, course_id, and assignmentTitle are required")
 
     try:
-        from llamaindex_rag.llamaindex_retrieval import RetrievalEngine, RetrievalMode
+        from llamaindex_rag.llamaindex_retrieval import get_retrieval_engine, RetrievalMode
 
-        # Initialize retrieval engine
-        retriever = RetrievalEngine(rag_core)
+        # ⚡ PERMANENT FIX: Use global singleton - no more downloads every request!
+        retriever = get_retrieval_engine()
 
         # Perform retrieval using hybrid mode (best for general use)
         results = retriever.retrieve(
