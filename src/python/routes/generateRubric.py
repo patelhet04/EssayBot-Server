@@ -53,25 +53,32 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
     try:
         context_text = ' '.join(context)
         prompt = f"""
-        You are an expert educational assessment designer. Your task is to create a grading rubric that helps students understand what is important and assists graders in evaluating student answers for the following question/assignment.
+        You are an expert educational assessment designer. Your task is to create a grading rubric based ONLY on the assignment question and course content provided below.
 
-        To create an effective rubric, ensure that each criterion is:
-        1. **Specific and measurable**: Clearly define what is being assessed.
-        2. **Relevant to the question**: Directly relate to the key concepts or skills the question is testing.
-        3. **Distinct**: Each criterion should cover a unique aspect of the assignment.
-        4. **Comprehensive**: Together, the criteria should cover all important aspects of the assignment.
-
-        For example, a criterion might assess the depth of understanding of key concepts, with scoring levels that differentiate between exceptional, basic, and limited comprehension.
-
-        **QUESTION:**
+        **ASSIGNMENT QUESTION:**
         {question}
 
-        **RELEVANT CONTEXT FROM COURSE MATERIALS:**
+        **COURSE CONTENT (Textbooks, Lectures, Course Materials):**
         {context_text}
 
-        Create a sample grading rubric with 3-4 relevant criteria tailored to this specific question. Each criterion should include:
+        **RUBRIC CREATION INSTRUCTIONS:**
+        Create grading criteria based EXCLUSIVELY on:
+        1. **The assignment question requirements** - what specific knowledge/skills it's testing
+        2. **The course content provided** - the main learning materials for this course
+        
+        Do NOT use external knowledge or general essay writing criteria. Base your rubric entirely on what students should demonstrate based on the course materials and question requirements.
+
+        **CRITERIA REQUIREMENTS:**
+        Each criterion should be:
+        1. **Specific to this assignment question** - directly assess what the question is asking
+        2. **Grounded in course content** - evaluate understanding of the provided course materials
+        3. **Measurable and distinct** - clearly define different aspects of student performance
+        4. **Keep criteria separate** - do not combine multiple concepts into one criterion
+        5. **Concise** - criterion descriptions should be 40-50 words maximum
+
+        Create a grading rubric with 3-5 relevant criteria. Each criterion should include:
         1. A clear name
-        2. A detailed description
+        2. A detailed description based on course content expectations
         3. A weight (numerical value where all weights add up to 100)
         4. Scoring levels with descriptions for full, partial, and minimal performance
         5. An empty subCriteria array
@@ -82,12 +89,12 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
           "criteria": [
             {{
               "name": "Criterion Name",
-              "description": "Detailed description of what is being assessed",
+              "description": "Detailed description grounded in course content and question requirements",
               "weight": number,
               "scoringLevels": {{
-                "full": "Description of full points performance",
-                "partial": "Description of partial points performance",
-                "minimal": "Description of minimal points performance"
+                "full": "Description of full points performance based on course expectations",
+                "partial": "Description of partial points performance based on course expectations",
+                "minimal": "Description of minimal points performance based on course expectations"
               }},
               "subCriteria": []
             }}
@@ -172,15 +179,15 @@ def generate_rubric():
         return jsonify({"error": "question, username, and courseId are required"}), 400
 
     try:
-        # Retrieve context from the FAISS index
+        # Retrieve comprehensive context from the FAISS index for rubric generation
         context = retrieve_relevant_text(
             query=question,
-            k=5,
+            k=30,  # Get many more chunks for comprehensive rubric coverage
             professor_username=professor,
             course_id=course_id,
             assignmentTitle=title,
-            distance_threshold=0.5,
-            max_total_length=6000
+            distance_threshold=0.3,  # Lower threshold to include more content
+            max_total_length=12000  # Double the context length for rubrics
         )
 
         # Generate a single rubric

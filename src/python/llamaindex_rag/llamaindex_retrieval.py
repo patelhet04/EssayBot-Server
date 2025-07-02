@@ -170,6 +170,7 @@ class RetrievalEngine:
         assignment_title: str,
         mode: RetrievalMode = RetrievalMode.HYBRID,
         top_k: Optional[int] = None,
+        index_type: str = "course_content",
         **kwargs
     ) -> Dict[str, Any]:
         """
@@ -182,6 +183,7 @@ class RetrievalEngine:
             assignment_title: Assignment identifier
             mode: Retrieval strategy to use
             top_k: Number of results to return
+            index_type: Type of index to retrieve from ("course_content", "supporting_docs")
             **kwargs: Additional parameters
 
         Returns:
@@ -190,13 +192,18 @@ class RetrievalEngine:
         start_time = time.time()
 
         try:
+            # Validate index_type
+            if index_type not in ["course_content", "supporting_docs"]:
+                raise ValueError(
+                    f"Invalid index_type: {index_type}. Must be 'course_content' or 'supporting_docs'")
+
             # Update config with provided parameters
             if top_k:
                 self.config.similarity_top_k = top_k
 
-            # Load index and nodes using the FIXED approach
+            # Load index and nodes using the FIXED approach with index type
             vector_index, nodes_data = self._load_index_and_nodes_fixed(
-                professor_username, course_id, assignment_title
+                professor_username, course_id, assignment_title, index_type
             )
 
             # Enhance query with SMART processing
@@ -272,24 +279,38 @@ class RetrievalEngine:
         self,
         professor_username: str,
         course_id: str,
-        assignment_title: str
+        assignment_title: str,
+        index_type: str = "course_content"
     ) -> Tuple[VectorStoreIndex, List[Dict[str, Any]]]:
-        """FIXED: Load and build index properly using fresh VectorStoreIndex creation."""
-        cache_key = f"{professor_username}_{course_id}_{assignment_title}"
+        """
+        Load both vector index and original node data for the specified index type.
+        This ensures we have complete node information including metadata.
+        """
+        # Validate index_type
+        if index_type not in ["course_content", "supporting_docs"]:
+            raise ValueError(
+                f"Invalid index_type: {index_type}. Must be 'course_content' or 'supporting_docs'")
+
+        cache_key = f"{professor_username}_{course_id}_{assignment_title}_{index_type}"
 
         # Check cache first
         if cache_key in self._index_cache and cache_key in self._nodes_cache:
+            logger.info(f"Using cached index and nodes for {cache_key}")
             return self._index_cache[cache_key], self._nodes_cache[cache_key]
+
+        # Construct S3 paths for the specific index type
+        s3_index_path = f"{professor_username}/{course_id}/{assignment_title}/{index_type}_index/faiss_index.index"
+        s3_nodes_path = f"{professor_username}/{course_id}/{assignment_title}/{index_type}_index/nodes.json"
+
+        logger.info(f"Loading {index_type} index from S3: {s3_index_path}")
+        logger.info(f"Loading {index_type} nodes from S3: {s3_nodes_path}")
+
         try:
             load_start = time.time()
 
-            # Generate S3 paths
-            base_path = self.core.get_document_path(
-                professor_username, course_id, assignment_title)
-            nodes_key = f"{base_path}/nodes.json"
-
             # Download nodes data
-            nodes_data = self.core.s3_manager.download_json(nodes_key)["nodes"]
+            nodes_data = self.core.s3_manager.download_json(s3_nodes_path)[
+                "nodes"]
 
             # LEARN FROM DOCUMENT CONTENT (no static word lists!)
             document_texts = [node["text"] for node in nodes_data]
@@ -314,9 +335,9 @@ class RetrievalEngine:
                 text_nodes.append(text_node)
 
             # Load pre-computed FAISS index from S3
-            index_key = f"{base_path}/faiss_index.index"
             with temporary_file(suffix=".index") as temp_index_path:
-                self.core.s3_manager.download_file(index_key, temp_index_path)
+                self.core.s3_manager.download_file(
+                    s3_index_path, temp_index_path)
                 faiss_index = faiss.read_index(temp_index_path)
 
                 # Create vector store from existing FAISS index
@@ -346,9 +367,18 @@ class RetrievalEngine:
     def _vector_retrieve(self, vector_index: VectorStoreIndex, query: str) -> List[NodeWithScore]:
         """Pure vector similarity retrieval using fixed LlamaIndex approach."""
         try:
+            # Get the number of nodes in the index to avoid requesting more than available
+            total_nodes = len(vector_index.docstore.docs)
+            # Use minimum of requested nodes and available nodes to prevent index errors
+            safe_top_k = min(self.config.similarity_top_k * 2,
+                             total_nodes, 20)  # Cap at 20 for safety
+
+            logger.debug(
+                f"Vector index has {total_nodes} nodes, requesting {safe_top_k} results")
+
             retriever = VectorIndexRetriever(
                 index=vector_index,
-                similarity_top_k=self.config.similarity_top_k * 2  # Get extra to filter
+                similarity_top_k=safe_top_k
             )
 
             # Perform retrieval
@@ -363,10 +393,16 @@ class RetrievalEngine:
                 if len(filtered_nodes) >= self.config.similarity_top_k:
                     break
 
+            logger.debug(
+                f"Vector retrieval returned {len(filtered_nodes)} filtered results")
             return filtered_nodes
 
         except Exception as e:
-            logger.error(f"Vector retrieval failed: {str(e)}")
+            logger.error(
+                f"Vector retrieval failed: {str(e)} (type: {type(e).__name__})")
+            # Log more details about the error
+            if hasattr(e, 'args') and e.args:
+                logger.error(f"Error details: {e.args}")
             return []
 
     def _keyword_retrieve(self, nodes_data: List[Dict[str, Any]], query: str) -> List[Dict[str, Any]]:
@@ -581,6 +617,97 @@ class RetrievalEngine:
         self._index_cache.clear()
         self._nodes_cache.clear()
         logger.info("Retrieval engine cache cleared")
+
+    def retrieve_dual_context(
+        self,
+        query: str,
+        professor_username: str,
+        course_id: str,
+        assignment_title: str,
+        mode: RetrievalMode = RetrievalMode.HYBRID,
+        top_k: Optional[int] = None,
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Retrieve from both course content and supporting documents indices.
+
+        Args:
+            query: Search query
+            professor_username: Professor identifier
+            course_id: Course identifier  
+            assignment_title: Assignment identifier
+            mode: Retrieval strategy to use
+            top_k: Number of results to return
+            **kwargs: Additional parameters
+
+        Returns:
+            Dictionary with retrieval results from both indices
+        """
+        start_time = time.time()
+        results = {
+            "course_content": {"results": [], "total_results": 0, "has_content": False},
+            "supporting_docs": {"results": [], "total_results": 0, "has_content": False},
+            "query": query,
+            "retrieval_time": 0.0,
+            "mode": mode.value
+        }
+
+        try:
+            # Try to retrieve from course content index
+            try:
+                course_results = self.retrieve(
+                    query=query,
+                    professor_username=professor_username,
+                    course_id=course_id,
+                    assignment_title=assignment_title,
+                    mode=mode,
+                    top_k=top_k,
+                    index_type="course_content",
+                    **kwargs
+                )
+                results["course_content"] = course_results
+                results["course_content"]["has_content"] = course_results["total_results"] > 0
+                logger.info(
+                    f"Retrieved {course_results['total_results']} results from course content")
+            except Exception as e:
+                logger.warning(f"Failed to retrieve from course content: {e}")
+                results["course_content"]["error"] = str(e)
+
+            # Try to retrieve from supporting docs index
+            try:
+                supporting_results = self.retrieve(
+                    query=query,
+                    professor_username=professor_username,
+                    course_id=course_id,
+                    assignment_title=assignment_title,
+                    mode=mode,
+                    top_k=top_k,
+                    index_type="supporting_docs",
+                    **kwargs
+                )
+                results["supporting_docs"] = supporting_results
+                results["supporting_docs"]["has_content"] = supporting_results["total_results"] > 0
+                logger.info(
+                    f"Retrieved {supporting_results['total_results']} results from supporting docs")
+            except Exception as e:
+                logger.warning(f"Failed to retrieve from supporting docs: {e}")
+                results["supporting_docs"]["error"] = str(e)
+
+            results["retrieval_time"] = time.time() - start_time
+
+            # Log summary
+            total_course = results["course_content"]["total_results"]
+            total_supporting = results["supporting_docs"]["total_results"]
+            logger.info(
+                f"Dual retrieval completed: {total_course} course content + {total_supporting} supporting docs in {results['retrieval_time']:.2f}s")
+
+            return results
+
+        except Exception as e:
+            logger.error(f"Dual context retrieval failed: {str(e)}")
+            results["retrieval_time"] = time.time() - start_time
+            results["error"] = str(e)
+            return results
 
 
 # Global singleton instance

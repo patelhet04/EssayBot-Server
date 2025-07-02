@@ -397,6 +397,72 @@ class LlamaIndexIndexer:
                 "error": str(e)
             }
 
+    def index_content_specifications(
+        self,
+        content_specifications: List[Dict[str, Any]],
+        professor_username: str,
+        course_id: str,
+        assignment_title: str
+    ) -> Dict[str, Any]:
+        """
+        Index documents based on content specifications with dual indexing.
+
+        Args:
+            content_specifications: List of file specifications from frontend
+            professor_username: Professor's username
+            course_id: Course identifier
+            assignment_title: Assignment identifier
+
+        Returns:
+            Dictionary with dual indexing results
+        """
+        start_time = time.time()
+
+        try:
+            logger.info(
+                f"Starting content specifications indexing: {len(content_specifications)} files")
+
+            # Validate input
+            if not content_specifications or len(content_specifications) == 0:
+                raise ValueError(
+                    "content_specifications must be a non-empty list")
+
+            # Process using DocumentProcessor
+            result = self.document_processor.process_content_specifications(
+                content_specifications=content_specifications,
+                professor_username=professor_username,
+                course_id=course_id,
+                assignment_title=assignment_title
+            )
+
+            processing_time = time.time() - start_time
+
+            # Format successful response
+            success_result = {
+                "success": True,
+                "processing_time": processing_time,
+                "course_content_index": result.get("course_content_index"),
+                "supporting_docs_index": result.get("supporting_docs_index"),
+                "processing_summary": result.get("processing_summary"),
+                "indexing_strategy": "dual_index"
+            }
+
+            logger.info(
+                f"Successfully processed content specifications in {processing_time:.2f}s")
+            return success_result
+
+        except Exception as e:
+            processing_time = time.time() - start_time
+            error_msg = f"Failed to index content specifications: {str(e)}"
+            logger.error(error_msg)
+
+            return {
+                "success": False,
+                "processing_time": processing_time,
+                "error_message": error_msg,
+                "indexing_strategy": "dual_index"
+            }
+
 
 # Example usage and testing
 if __name__ == "__main__":

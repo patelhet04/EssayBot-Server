@@ -130,49 +130,69 @@ def grade_essay_sync(
 
             # Conditional RAG retrieval using SAME retrieval engine (no duplicate initialization!)
             if specificity_score < 0.1:  # Skip RAG for gibberish responses
-                rag_context = "No context provided due to irrelevant response."
+                course_context = "No context provided due to irrelevant response."
+                supporting_context = ""
+                has_supporting_docs = False
                 logger.info(
                     f"⚠️ SKIPPING RAG RETRIEVAL - Essay {progress.current_essay_index + 1} too irrelevant (specificity: {specificity_score:.3f})")
             else:
-                # Use the ALREADY INITIALIZED retrieval engine for RAG
-                rag_results = retrieval_engine.retrieve(
+                # Use the ALREADY INITIALIZED retrieval engine for dual RAG
+                dual_results = retrieval_engine.retrieve_dual_context(
                     query=question,
                     professor_username=professor_username,
                     course_id=course_id,
                     assignment_title=assignment_title,
-                    top_k=RAG_K
+                    top_k=8  # Smaller for bulk processing
                 )
 
-                if rag_results['total_results'] > 0:
-                    # Limit total context length
-                    rag_chunks = []
+                # Process course content results
+                if dual_results['course_content']['total_results'] > 0:
+                    course_chunks = []
                     total_length = 0
-                    for result in rag_results['results']:
+                    for result in dual_results['course_content']['results']:
                         chunk_text = result['text']
-                        if total_length + len(chunk_text) > RAG_MAX_TOTAL_LENGTH:
+                        if total_length + len(chunk_text) > 3000:  # Smaller for bulk
                             break
-                        rag_chunks.append(chunk_text)
+                        course_chunks.append(chunk_text)
                         total_length += len(chunk_text)
-                    rag_context = "\n".join(rag_chunks)
+                    course_context = "\n".join(course_chunks)
                 else:
-                    rag_context = "No relevant context available."
+                    course_context = "No relevant course content available."
+
+                # Process supporting docs results
+                supporting_context = ""
+                has_supporting_docs = dual_results['supporting_docs']['has_content']
+                if has_supporting_docs and dual_results['supporting_docs']['total_results'] > 0:
+                    supporting_chunks = []
+                    total_length = 0
+                    for result in dual_results['supporting_docs']['results']:
+                        chunk_text = result['text']
+                        # Smaller limit for supporting docs
+                        if total_length + len(chunk_text) > 1500:
+                            break
+                        supporting_chunks.append(chunk_text)
+                        total_length += len(chunk_text)
+                    supporting_context = "\n".join(supporting_chunks)
 
                 logger.info(
-                    f"📖 RAG context retrieved for essay {progress.current_essay_index + 1}/{progress.total_essays}")
+                    f"📖 Course content: {len(course_context)} chars, Supporting docs: {len(supporting_context)} chars for essay {progress.current_essay_index + 1}/{progress.total_essays}")
 
         except Exception as e:
             logger.warning(
                 f"Smart analysis/RAG failed, using default scoring: {e}")
             specificity_score = 0.5
             quality_multiplier = 1.0
-            rag_context = "No context available due to analysis error."
+            course_context = "No context available due to analysis error."
+            supporting_context = ""
+            has_supporting_docs = False
 
         # Step 3: Assemble the prompts using get_prompt from agents.py (with quality awareness)
         assembled_prompts = get_prompt(
             config_prompt,
             tone=tone,
             quality_multiplier=quality_multiplier,
-            specificity_score=specificity_score
+            specificity_score=specificity_score,
+            has_supporting_docs=has_supporting_docs
         )
         if not assembled_prompts or "criteria_prompts" not in assembled_prompts:
             raise ValueError("Failed to assemble prompts")
@@ -184,7 +204,13 @@ def grade_essay_sync(
             full_prompt = prompt_data["prompt"]
             full_prompt = full_prompt.replace("{{question}}", question)
             full_prompt = full_prompt.replace("{{essay}}", essay)
-            full_prompt = full_prompt.replace("{{rag_context}}", rag_context)
+            full_prompt = full_prompt.replace(
+                "{{course_context}}", course_context)
+
+            # Conditionally replace supporting context
+            if has_supporting_docs:
+                full_prompt = full_prompt.replace(
+                    "{{supporting_context}}", supporting_context)
 
             # Send the prompt to the LLM for grading
             response = send_post_request_sync(full_prompt, model=model)
