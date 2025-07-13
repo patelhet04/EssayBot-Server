@@ -3,6 +3,7 @@ import json
 import logging
 import random
 import requests
+import re
 from typing import List, Dict, Any
 from flask import Flask, request, jsonify, Blueprint
 
@@ -101,7 +102,11 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
           ]
         }}
 
-        Return ONLY the JSON object with no additional text before or after it.
+        **IMPORTANT:**
+        - Return ONLY the JSON object with no additional text before or after it
+        - Do NOT include labels like "Full Points:" or "Partial Points:" in the scoringLevels descriptions
+        - The descriptions should be the actual expectation text only
+        - Keep scoring level descriptions concise and specific
         """
         response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
                                      max_tokens=1000, model=model)
@@ -123,6 +128,19 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
                             "partial": "Satisfactory performance in this criterion.",
                             "minimal": "Minimal performance in this criterion."
                         }
+                    
+                    # Clean scoring levels to remove any labels
+                    if "scoringLevels" in criterion and isinstance(criterion["scoringLevels"], dict):
+                        def clean_text(text):
+                            if not text:
+                                return ""
+                            # Remove common labels that might be included
+                            return re.sub(r'^(Full Points?|Partial Points?|Minimal Points?):\s*', '', text, flags=re.IGNORECASE).strip()
+                        
+                        for level in ["full", "partial", "minimal"]:
+                            if level in criterion["scoringLevels"]:
+                                criterion["scoringLevels"][level] = clean_text(criterion["scoringLevels"][level])
+                    
                     if "weight" not in criterion or not isinstance(criterion["weight"], (int, float)):
                         criterion["weight"] = 100 // len(
                             rubric_json["criteria"])
@@ -165,6 +183,79 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
         }
 
 
+def generate_criteria_expectations(criteria_name: str, criteria_description: str, question: str, context: List[str], bracket_labels: List[str], model: str = "llama3.3:70b") -> Dict[str, str]:
+    """Generate expectations for a single criterion based on its name and description, for arbitrary bracket labels."""
+    logger.info(f"Generating expectations for criterion: {criteria_name} using model: {model}...")
+    try:
+        context_text = ' '.join(context)
+        # Dynamically build the bracket instructions
+        bracket_instructions = "\n".join([
+            f"{i+1}. **{label}**: What constitutes {label.lower()} performance for this criterion" for i, label in enumerate(bracket_labels)
+        ])
+        bracket_json = ",\n".join([f'  "{label}": "Description for {label} performance"' for label in bracket_labels])
+        prompt = f"""
+        You are an expert educational assessment designer. Your task is to generate specific expectations for a grading criterion based on the assignment question and course content.
+
+        **ASSIGNMENT QUESTION:**
+        {question}
+
+        **CRITERION DETAILS:**
+        Name: {criteria_name}
+        Description: {criteria_description}
+
+        **COURSE CONTENT (Textbooks, Lectures, Course Materials):**
+        {context_text}
+
+        **EXPECTATIONS GENERATION INSTRUCTIONS:**
+        Based on the criterion name, description, assignment question, and course content, generate expectations for each of the following marks brackets:
+{bracket_instructions}
+
+        **REQUIREMENTS:**
+        - Base expectations EXCLUSIVELY on the course content and assignment requirements
+        - Be specific and measurable
+        - Use clear, academic language
+        - **Keep expectations SHORT and PRECISE - maximum 10-15 words each**
+        - Focus on key performance indicators only
+        - Avoid verbose descriptions
+        - Ensure expectations align with the criterion's focus and the assignment question
+
+        Return ONLY a JSON object with the following structure:
+        {{
+{bracket_json}
+        }}
+
+        **IMPORTANT:**
+        - Return ONLY the JSON object with no additional text before or after it
+        - Do NOT include labels like "Full Points:" or similar in the descriptions
+        - The descriptions should be the actual expectation text only
+        - Keep each description short and precise (10-15 words maximum)
+        """
+        response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
+                                     max_tokens=800, model=model)
+        response = response.strip()
+        json_start = response.find('{')
+        json_end = response.rfind('}') + 1
+        if json_start != -1 and json_end > json_start:
+            json_str = response[json_start:json_end]
+            try:
+                expectations_json = json.loads(json_str)
+                # Ensure all required fields are present
+                for label in bracket_labels:
+                    if label not in expectations_json or not expectations_json[label]:
+                        expectations_json[label] = f"Default {label} expectation for {criteria_name}"
+                logger.info(f"Successfully generated expectations for criterion: {criteria_name}")
+                return expectations_json
+            except json.JSONDecodeError as e:
+                logger.error(f"Error parsing JSON from model response: {str(e)}")
+                raise
+        else:
+            logger.error("Could not find valid JSON in model response")
+            raise ValueError("No valid JSON found in response")
+    except Exception as e:
+        logger.error(f"Error generating expectations for criterion {criteria_name}: {str(e)}")
+        return {label: f"Default {label} expectation for {criteria_name}" for label in bracket_labels}
+
+
 @rubric_bp.route("/generate_rubric", methods=["POST"])
 def generate_rubric():
     data = request.get_json()
@@ -205,5 +296,49 @@ def generate_rubric():
         return jsonify({
             "success": False,
             "message": f"Error generating sample rubric: {str(e)}",
+            "error": str(e)
+        }), 500
+
+
+@rubric_bp.route("/fill_expectations", methods=["POST"])
+def fill_expectations():
+    data = request.get_json()
+    print(data)
+    criteria_name = data.get("criteriaName")
+    criteria_description = data.get("criteriaDescription")
+    question = data.get("question")
+    professor = data.get("username")
+    title = data.get("title")
+    course_id = data.get("courseId")
+    model = data.get("model", "llama3.3:70b")
+    bracket_labels = data.get("bracketLabels")
+    if not all([criteria_name, criteria_description, question, professor, course_id, title, bracket_labels]):
+        return jsonify({"error": "criteriaName, criteriaDescription, question, username, courseId, and bracketLabels are required"}), 400
+    try:
+        # Retrieve relevant context from the FAISS index
+        context = retrieve_relevant_text(
+            query=f"{criteria_name} {criteria_description}",
+            k=20,
+            professor_username=professor,
+            course_id=course_id,
+            assignmentTitle=title,
+            distance_threshold=0.4,
+            max_total_length=8000
+        )
+        # Generate expectations for the criterion and all brackets
+        expectations = generate_criteria_expectations(
+            criteria_name, criteria_description, question, context, bracket_labels, model=model
+        )
+        result = {
+            "success": True,
+            "message": "Generated expectations successfully",
+            "expectations": expectations
+        }
+        return jsonify(result)
+    except Exception as e:
+        logger.exception(f"Error generating expectations: {str(e)}")
+        return jsonify({
+            "success": False,
+            "message": f"Error generating expectations: {str(e)}",
             "error": str(e)
         }), 500

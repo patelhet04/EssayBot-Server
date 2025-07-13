@@ -2,3 +2,10 @@ node_modules/
 *.lock
 .env
 package-lock.json
+package.json
+node_modules/
+src/python/__pycache__
+src/python/routes/__pycache__
+src/python/llamaindex_rag/__pycache__
+src/python/cache
+src/python/llamaindex_rag.log

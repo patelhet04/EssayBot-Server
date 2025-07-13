@@ -59,3 +59,57 @@ export const createRubric = async (
     });
   }
 };
+
+export const fillCriteriaExpectations = async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { courseId, criteriaName, criteriaDescription, question, assignmentId, model, bracketLabels } = req.body;
+    const username = req.user.username;
+
+    if (!courseId || !criteriaName || !criteriaDescription || !question || !assignmentId || !bracketLabels) {
+      return res.status(400).json({
+        message: "courseId, criteriaName, criteriaDescription, question, assignmentId, and bracketLabels are required",
+      });
+    }
+
+    // Prepare request payload for Flask
+    const payload = {
+      courseId,
+      criteriaName,
+      criteriaDescription,
+      question,
+      username,
+      title: assignmentId,
+      model,
+      bracketLabels,
+    };
+
+    // Call Flask /fill_expectations endpoint
+    const flaskResponse = await axios.post(
+      "http://localhost:6000/fill_expectations",
+      payload
+    );
+
+    const { data }: any = flaskResponse;
+    console.log(data?.expectations);
+    if ((data as any).success) {
+      return res.status(200).json({
+        message: "Expectations generated successfully",
+        expectations: (data as any).expectations,
+      });
+    } else {
+      return res.status(500).json({
+        message: "Failed to generate expectations",
+        error: (data as any).error || "Unknown error",
+      });
+    }
+  } catch (error: any) {
+    console.error("Error filling expectations:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error?.response?.data?.error || error.message,
+    });
+  }
+};

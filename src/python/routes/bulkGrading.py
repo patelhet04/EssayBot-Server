@@ -72,8 +72,7 @@ def send_post_request_sync(
         "stream": False,
         "max_tokens": max_tokens,
         "temperature": temperature,
-        "top_p": top_p,
-        "format": "json"
+        "top_p": top_p
     }
     headers = {"Content-Type": "application/json"}
 
@@ -102,6 +101,35 @@ def grade_essay_sync(
     Returns feedback and scores for each agent (criterion).
     """
     try:
+        # Parse config_prompt if it contains JSON strings
+        if isinstance(config_prompt, dict):
+            parsed_config_prompt = []
+            for criterion_name, prompt_data in config_prompt.items():
+                if isinstance(prompt_data, str):
+                    try:
+                        parsed_prompt = json.loads(prompt_data)
+                        parsed_config_prompt.append({
+                            "criterionName": criterion_name,
+                            "prompt": parsed_prompt
+                        })
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to parse prompt for criterion {criterion_name}: {e}")
+                        # Use a default prompt structure
+                        parsed_config_prompt.append({
+                            "criterionName": criterion_name,
+                            "prompt": {
+                                "header": f"**{criterion_name}**",
+                                "introduction": "Check if the essay meets these requirements:",
+                                "instructions": ["Evaluate the essay based on this criterion"]
+                            }
+                        })
+                else:
+                    # Already parsed object
+                    parsed_config_prompt.append({
+                        "criterionName": criterion_name,
+                        "prompt": prompt_data
+                    })
+            config_prompt = parsed_config_prompt
         # Step 1 & 2: PERMANENT FIX - Use global singleton for caching
         retrieval_engine = None
         try:

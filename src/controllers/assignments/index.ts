@@ -16,16 +16,19 @@ export interface Criterion {
   name: string;
   description: string;
   weight: number;
-  scoringLevels: ScoringLevels;
+  scoringLevels: string[];
   subCriteria: Criterion[];
+}
+
+export interface RubricConfig {
+  gradingBrackets: { label: string; range: string }[];
+  criteria: Criterion[];
 }
 
 // Type for the update payload
 export interface AssignmentUpdatePayload {
   question?: string;
-  config_rubric?: {
-    criteria: Criterion[];
-  };
+  config_rubric?: RubricConfig;
   config_prompt?: Record<string, any>;
   model?: string;
 }

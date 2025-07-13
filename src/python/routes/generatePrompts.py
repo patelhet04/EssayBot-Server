@@ -27,8 +27,7 @@ def send_post_request(prompt, temperature=0.3, top_p=0.1, max_tokens=2048, model
         "stream": False,
         "max_tokens": max_tokens,
         "temperature": temperature,
-        "top_p": top_p,
-        "format": "json"
+        "top_p": top_p
     }
     headers = {"Content-Type": "application/json"}
 

@@ -28,8 +28,7 @@ def send_post_request(prompt, temperature=0.2, top_p=0.1, max_tokens=2048, model
         "stream": False,
         "max_tokens": max_tokens,
         "temperature": temperature,
-        "top_p": top_p,
-        "format": "json"
+        "top_p": top_p
     }
     headers = {"Content-Type": "application/json"}
 
@@ -63,6 +62,36 @@ def grade_single_essay():
         config_prompt = data["config_prompt"]
         question = data["question"]
         professor_username = data["username"]
+
+        # Parse config_prompt if it contains JSON strings
+        if isinstance(config_prompt, dict):
+            parsed_config_prompt = []
+            for criterion_name, prompt_data in config_prompt.items():
+                if isinstance(prompt_data, str):
+                    try:
+                        parsed_prompt = json.loads(prompt_data)
+                        parsed_config_prompt.append({
+                            "criterionName": criterion_name,
+                            "prompt": parsed_prompt
+                        })
+                    except json.JSONDecodeError as e:
+                        logger.error(f"Failed to parse prompt for criterion {criterion_name}: {e}")
+                        # Use a default prompt structure
+                        parsed_config_prompt.append({
+                            "criterionName": criterion_name,
+                            "prompt": {
+                                "header": f"**{criterion_name}**",
+                                "introduction": "Check if the essay meets these requirements:",
+                                "instructions": ["Evaluate the essay based on this criterion"]
+                            }
+                        })
+                else:
+                    # Already parsed object
+                    parsed_config_prompt.append({
+                        "criterionName": criterion_name,
+                        "prompt": prompt_data
+                    })
+            config_prompt = parsed_config_prompt
 
         # Step 1 & 2: Optimized single initialization for both essay analysis and RAG
         retrieval_engine = None
