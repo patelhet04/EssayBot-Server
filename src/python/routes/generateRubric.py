@@ -194,30 +194,24 @@ def generate_criteria_expectations(criteria_name: str, criteria_description: str
         ])
         bracket_json = ",\n".join([f'  "{label}": "Description for {label} performance"' for label in bracket_labels])
         prompt = f"""
-        You are an expert educational assessment designer. Your task is to generate specific expectations for a grading criterion based on the assignment question and course content.
-
-        **ASSIGNMENT QUESTION:**
-        {question}
+        You are an expert educational assessment designer. Your task is to generate specific expectations for a grading criterion.
 
         **CRITERION DETAILS:**
         Name: {criteria_name}
         Description: {criteria_description}
 
-        **COURSE CONTENT (Textbooks, Lectures, Course Materials):**
-        {context_text}
-
         **EXPECTATIONS GENERATION INSTRUCTIONS:**
-        Based on the criterion name, description, assignment question, and course content, generate expectations for each of the following marks brackets:
+        Based ONLY on the criterion name and description above, generate expectations for each of the following marks brackets:
 {bracket_instructions}
 
         **REQUIREMENTS:**
-        - Base expectations EXCLUSIVELY on the course content and assignment requirements
-        - Be specific and measurable
+        - Focus EXCLUSIVELY on the specific criterion (name and description)
+        - Do NOT reference the assignment question or course content
+        - Be specific and measurable for the criterion being assessed
         - Use clear, academic language
         - **Keep expectations SHORT and PRECISE - maximum 10-15 words each**
-        - Focus on key performance indicators only
+        - Focus on key performance indicators for this specific criterion only
         - Avoid verbose descriptions
-        - Ensure expectations align with the criterion's focus and the assignment question
 
         Return ONLY a JSON object with the following structure:
         {{
@@ -229,6 +223,7 @@ def generate_criteria_expectations(criteria_name: str, criteria_description: str
         - Do NOT include labels like "Full Points:" or similar in the descriptions
         - The descriptions should be the actual expectation text only
         - Keep each description short and precise (10-15 words maximum)
+        - Focus ONLY on the criterion, not the assignment topic
         """
         response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
                                      max_tokens=800, model=model)

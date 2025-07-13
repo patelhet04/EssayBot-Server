@@ -13,3 +13,1886 @@
 2025-07-12 23:24:04,459 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:6000
 2025-07-12 23:24:04,459 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 09:55:28,000 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 09:55:28,011 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 09:55:30,209 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 09:55:30,211 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 09:55:30,211 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 09:55:30,580 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 09:55:30,580 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 09:55:30,580 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 09:55:30,580 - llamaindex_rag.llamaindex_document_processor - INFO - DocumentProcessor initialized
+2025-07-13 09:55:30,580 - llamaindex_rag.llamaindex_indexing - INFO - LlamaIndexIndexer initialized successfully
+2025-07-13 09:55:30,580 - routes.rag_pipeline - INFO - 🚀 LlamaIndex RAG system initialized successfully
+2025-07-13 09:55:30,580 - routes.rag_pipeline - INFO - 🚀 RetrievalEngine will use singleton pattern for optimal caching
+2025-07-13 09:55:30,599 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:6000
+2025-07-13 09:55:30,599 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 09:55:51,692 - llamaindex_rag.llamaindex_retrieval - INFO - 🔄 Creating global RetrievalEngine singleton instance
+2025-07-13 09:55:51,798 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 09:55:51,799 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 09:55:53,459 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_retrieval - INFO - RetrievalEngine initialized with smart query processor
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_retrieval - INFO - ✅ Global RetrievalEngine singleton instance created
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index
+2025-07-13 09:55:53,459 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json
+2025-07-13 09:55:53,584 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp5jsbkq0e
+2025-07-13 09:55:53,691 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmprziob34m.index
+2025-07-13 09:55:57,473 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 46 documents
+2025-07-13 09:55:57,533 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '8' (type: KeyError)
+2025-07-13 09:55:57,533 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('8',)
+2025-07-13 09:55:57,534 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 09:55:57,534 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 546 chars
+2025-07-13 09:55:57,534 - routes.generateRubric - INFO - Generating expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices using model: llama3.2-vision:11b...
+2025-07-13 09:55:57,534 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 09:55:59,967 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 09:55:59,968 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:55:59] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 09:55:59,982 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 09:56:00,080 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 09:56:00,080 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 09:56:00,081 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 09:56:00,081 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 4 chunks, 2572 chars
+2025-07-13 09:56:00,081 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Porter's Five Forces Model using model: llama3.2-vision:11b...
+2025-07-13 09:56:00,081 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 09:56:01,199 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Porter's Five Forces Model
+2025-07-13 09:56:01,200 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:56:01] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 09:56:01,215 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 09:56:01,297 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '10' (type: KeyError)
+2025-07-13 09:56:01,297 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('10',)
+2025-07-13 09:56:01,298 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 09:56:01,298 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 09:56:01,298 - routes.generateRubric - INFO - Generating expectations for criterion: Analysis of Sustainability and Competitive Superiority using model: llama3.2-vision:11b...
+2025-07-13 09:56:01,298 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 09:56:02,365 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 09:56:02,366 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:56:02] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 09:56:02,378 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 09:56:02,454 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '14' (type: KeyError)
+2025-07-13 09:56:02,454 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('14',)
+2025-07-13 09:56:02,454 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 09:56:02,454 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 09:56:02,454 - routes.generateRubric - INFO - Generating expectations for criterion: Value Chain Analysis  using model: llama3.2-vision:11b...
+2025-07-13 09:56:02,454 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 09:56:03,615 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Value Chain Analysis 
+2025-07-13 09:56:03,617 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:56:03] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 09:56:03,627 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 09:56:03,737 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 09:56:03,737 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 09:56:03,738 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 09:56:03,738 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 09:56:03,738 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Course Concepts using model: llama3.2-vision:11b...
+2025-07-13 09:56:03,738 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 09:56:04,920 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Course Concepts
+2025-07-13 09:56:04,921 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:56:04] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 09:56:12,775 - routes.generatePrompts - INFO - Generated prompt for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 09:56:13,598 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Porter's Five Forces Model
+2025-07-13 09:56:14,300 - routes.generatePrompts - INFO - Generated prompt for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 09:56:15,117 - routes.generatePrompts - INFO - Generated prompt for criterion: Value Chain Analysis 
+2025-07-13 09:56:15,941 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Course Concepts
+2025-07-13 09:56:15,942 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 09:56:15] "POST /generate_prompt HTTP/1.1" 200 -
+2025-07-13 10:01:39,449 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 10:01:39,459 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 10:01:41,489 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 10:01:41,490 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 10:01:41,490 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 10:01:41,819 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 10:01:41,820 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 10:01:41,820 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 10:01:41,820 - llamaindex_rag.llamaindex_document_processor - INFO - DocumentProcessor initialized
+2025-07-13 10:01:41,820 - llamaindex_rag.llamaindex_indexing - INFO - LlamaIndexIndexer initialized successfully
+2025-07-13 10:01:41,820 - routes.rag_pipeline - INFO - 🚀 LlamaIndex RAG system initialized successfully
+2025-07-13 10:01:41,820 - routes.rag_pipeline - INFO - 🚀 RetrievalEngine will use singleton pattern for optimal caching
+2025-07-13 10:01:41,830 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:6000
+2025-07-13 10:01:41,830 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 10:04:50,783 - llamaindex_rag.llamaindex_retrieval - INFO - 🔄 Creating global RetrievalEngine singleton instance
+2025-07-13 10:04:50,835 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 10:04:50,836 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 10:04:52,427 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 10:04:52,429 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 10:04:52,429 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 10:04:52,429 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_retrieval - INFO - RetrievalEngine initialized with smart query processor
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_retrieval - INFO - ✅ Global RetrievalEngine singleton instance created
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index
+2025-07-13 10:04:52,430 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json
+2025-07-13 10:04:52,639 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp2nvgzqji
+2025-07-13 10:04:52,837 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmplxy_cm6b.index
+2025-07-13 10:04:56,493 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 46 documents
+2025-07-13 10:04:56,549 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '36' (type: KeyError)
+2025-07-13 10:04:56,549 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('36',)
+2025-07-13 10:04:56,549 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 10:04:56,549 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 2 chunks, 253 chars
+2025-07-13 10:04:56,549 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 10:04:56,550 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 10:04:58,906 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 10:04:58,909 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 10:04:58] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 10:06:17,544 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 10:06:17,554 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 10:06:19,533 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 10:06:19,533 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 10:06:19,533 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 10:06:19,846 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 10:06:19,846 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 10:06:19,846 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 10:06:19,846 - llamaindex_rag.llamaindex_document_processor - INFO - DocumentProcessor initialized
+2025-07-13 10:06:19,846 - llamaindex_rag.llamaindex_indexing - INFO - LlamaIndexIndexer initialized successfully
+2025-07-13 10:06:19,846 - routes.rag_pipeline - INFO - 🚀 LlamaIndex RAG system initialized successfully
+2025-07-13 10:06:19,846 - routes.rag_pipeline - INFO - 🚀 RetrievalEngine will use singleton pattern for optimal caching
+2025-07-13 10:06:19,856 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:6000
+2025-07-13 10:06:19,856 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 13:12:05,935 - llamaindex_rag.llamaindex_retrieval - INFO - 🔄 Creating global RetrievalEngine singleton instance
+2025-07-13 13:12:05,981 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 13:12:05,982 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 13:12:08,133 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 13:12:08,134 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 13:12:08,134 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 13:12:08,134 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_retrieval - INFO - RetrievalEngine initialized with smart query processor
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_retrieval - INFO - ✅ Global RetrievalEngine singleton instance created
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index
+2025-07-13 13:12:08,135 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json
+2025-07-13 13:12:08,239 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp58rb25rf
+2025-07-13 13:12:08,393 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmpgw9gcl48.index
+2025-07-13 13:12:12,099 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 46 documents
+2025-07-13 13:12:12,167 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '35' (type: KeyError)
+2025-07-13 13:12:12,167 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('35',)
+2025-07-13 13:12:12,169 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:12:12,169 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 2 chunks, 253 chars
+2025-07-13 13:12:12,169 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 13:12:12,169 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:12:13,330 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 13:12:13,331 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:12:13] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:20,971 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:21,071 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '35' (type: KeyError)
+2025-07-13 13:13:21,071 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('35',)
+2025-07-13 13:13:21,072 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:21,072 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 2 chunks, 253 chars
+2025-07-13 13:13:21,072 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 13:13:21,072 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:21,927 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 13:13:21,928 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:21] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:51,051 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:51,167 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '8' (type: KeyError)
+2025-07-13 13:13:51,167 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('8',)
+2025-07-13 13:13:51,167 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:51,167 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 546 chars
+2025-07-13 13:13:51,167 - routes.generateRubric - INFO - Generating expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices using model: llama3.2-vision:11b...
+2025-07-13 13:13:51,167 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:52,167 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:13:52,167 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:52] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:52,177 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:52,205 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 13:13:52,205 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 13:13:52,206 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:52,206 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 4 chunks, 2572 chars
+2025-07-13 13:13:52,206 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Porter's Five Forces Model using model: llama3.2-vision:11b...
+2025-07-13 13:13:52,206 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:53,581 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:13:53,583 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:53] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:53,597 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:53,714 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '10' (type: KeyError)
+2025-07-13 13:13:53,714 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('10',)
+2025-07-13 13:13:53,714 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:53,714 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:13:53,714 - routes.generateRubric - INFO - Generating expectations for criterion: Analysis of Sustainability and Competitive Superiority using model: llama3.2-vision:11b...
+2025-07-13 13:13:53,714 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:54,807 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:13:54,808 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:54] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:54,820 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:54,907 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '14' (type: KeyError)
+2025-07-13 13:13:54,907 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('14',)
+2025-07-13 13:13:54,908 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:54,908 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:13:54,908 - routes.generateRubric - INFO - Generating expectations for criterion: Value Chain Analysis  using model: llama3.2-vision:11b...
+2025-07-13 13:13:54,908 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:56,139 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Value Chain Analysis 
+2025-07-13 13:13:56,140 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:56] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:13:56,153 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:13:56,272 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 13:13:56,272 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 13:13:56,273 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:13:56,273 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:13:56,273 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Course Concepts using model: llama3.2-vision:11b...
+2025-07-13 13:13:56,273 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:13:57,364 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Course Concepts
+2025-07-13 13:13:57,365 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:13:57] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:14:50,169 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:14:50,292 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '36' (type: KeyError)
+2025-07-13 13:14:50,293 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('36',)
+2025-07-13 13:14:50,293 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:14:50,293 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 417 chars
+2025-07-13 13:14:50,293 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 13:14:50,293 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:14:51,270 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 13:14:51,271 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:14:51] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:18:05,506 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:18:05,642 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '11' (type: KeyError)
+2025-07-13 13:18:05,642 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('11',)
+2025-07-13 13:18:05,642 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:18:05,642 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 417 chars
+2025-07-13 13:18:05,642 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 13:18:05,642 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:18:06,822 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 13:18:06,823 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:18:06] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:18:25,446 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 13:18:25,456 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 13:18:27,486 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 13:18:27,487 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 13:18:27,487 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 13:18:27,838 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 13:18:27,838 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 13:18:27,838 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 13:18:27,838 - llamaindex_rag.llamaindex_document_processor - INFO - DocumentProcessor initialized
+2025-07-13 13:18:27,838 - llamaindex_rag.llamaindex_indexing - INFO - LlamaIndexIndexer initialized successfully
+2025-07-13 13:18:27,838 - routes.rag_pipeline - INFO - 🚀 LlamaIndex RAG system initialized successfully
+2025-07-13 13:18:27,838 - routes.rag_pipeline - INFO - 🚀 RetrievalEngine will use singleton pattern for optimal caching
+2025-07-13 13:18:27,850 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:6000
+2025-07-13 13:18:27,850 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 13:18:56,200 - llamaindex_rag.llamaindex_retrieval - INFO - 🔄 Creating global RetrievalEngine singleton instance
+2025-07-13 13:18:56,253 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 13:18:56,253 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 13:18:57,851 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 13:18:57,853 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 13:18:57,853 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_retrieval - INFO - RetrievalEngine initialized with smart query processor
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_retrieval - INFO - ✅ Global RetrievalEngine singleton instance created
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index
+2025-07-13 13:18:57,858 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json
+2025-07-13 13:18:57,972 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmptmi07wxm
+2025-07-13 13:18:58,086 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp48468kej.index
+2025-07-13 13:19:01,741 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 46 documents
+2025-07-13 13:19:01,797 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '8' (type: KeyError)
+2025-07-13 13:19:01,797 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('8',)
+2025-07-13 13:19:01,797 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:01,797 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 546 chars
+2025-07-13 13:19:01,797 - routes.generateRubric - INFO - Generating expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices using model: llama3.2-vision:11b...
+2025-07-13 13:19:01,797 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:02,764 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:19:02,768 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:02] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:02,787 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:19:02,822 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 13:19:02,822 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 13:19:02,822 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:02,822 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 4 chunks, 2572 chars
+2025-07-13 13:19:02,822 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Porter's Five Forces Model using model: llama3.2-vision:11b...
+2025-07-13 13:19:02,822 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:03,772 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:19:03,776 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:03] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:03,790 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:19:03,855 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '10' (type: KeyError)
+2025-07-13 13:19:03,855 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('10',)
+2025-07-13 13:19:03,856 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:03,856 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:19:03,856 - routes.generateRubric - INFO - Generating expectations for criterion: Analysis of Sustainability and Competitive Superiority using model: llama3.2-vision:11b...
+2025-07-13 13:19:03,856 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:04,896 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:19:04,897 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:04] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:04,917 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:19:05,021 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '14' (type: KeyError)
+2025-07-13 13:19:05,021 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('14',)
+2025-07-13 13:19:05,022 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:05,022 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:19:05,022 - routes.generateRubric - INFO - Generating expectations for criterion: Value Chain Analysis  using model: llama3.2-vision:11b...
+2025-07-13 13:19:05,022 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:05,934 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Value Chain Analysis 
+2025-07-13 13:19:05,936 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:05] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:05,944 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:19:06,020 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '18' (type: KeyError)
+2025-07-13 13:19:06,020 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('18',)
+2025-07-13 13:19:06,020 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:06,021 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 7 chunks, 4003 chars
+2025-07-13 13:19:06,021 - routes.generateRubric - INFO - Generating expectations for criterion: Application of Course Concepts using model: llama3.2-vision:11b...
+2025-07-13 13:19:06,021 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:07,032 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Application of Course Concepts
+2025-07-13 13:19:07,034 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:07] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:35,713 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:19:35,821 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '11' (type: KeyError)
+2025-07-13 13:19:35,821 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('11',)
+2025-07-13 13:19:35,822 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:19:35,822 - routes.rag_pipeline - INFO - 📖 Legacy retrieval (course_content): 1 chunks, 417 chars
+2025-07-13 13:19:35,822 - routes.generateRubric - INFO - Generating expectations for criterion: Grammar using model: llama3.2-vision:11b...
+2025-07-13 13:19:35,822 - routes.generateRubric - INFO - Sending request to local model: llama3.2-vision:11b
+2025-07-13 13:19:36,726 - routes.generateRubric - INFO - Successfully generated expectations for criterion: Grammar
+2025-07-13 13:19:36,727 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:36] "POST /fill_expectations HTTP/1.1" 200 -
+2025-07-13 13:19:43,364 - routes.generatePrompts - INFO - Generated prompt for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:19:44,285 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:19:44,880 - routes.generatePrompts - INFO - Generated prompt for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:19:45,638 - routes.generatePrompts - INFO - Generated prompt for criterion: Value Chain Analysis 
+2025-07-13 13:19:46,457 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Course Concepts
+2025-07-13 13:19:47,076 - routes.generatePrompts - INFO - Generated prompt for criterion: Grammar
+2025-07-13 13:19:47,078 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:19:47] "POST /generate_prompt HTTP/1.1" 200 -
+2025-07-13 13:20:24,962 - routes.generatePrompts - ERROR - Failed to parse LLM response for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices, error: Expecting value: line 1 column 1 (char 0)
+2025-07-13 13:20:24,965 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:20:24] "[35m[1mPOST /generate_prompt HTTP/1.1[0m" 500 -
+2025-07-13 13:20:24,989 - routes.script - INFO - 🔍 DEBUG: About to analyze student essay: 'Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...'
+2025-07-13 13:20:24,989 - routes.script - INFO - 🔍 DEBUG: Assignment question: 'How has Southwest Airlines used its unique organizational culture and human resource practices to ga...'
+2025-07-13 13:20:24,989 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:20:24,991 - routes.script - INFO - 🎯 ESSAY ANALYSIS - Text: 'Southwest Airlines has always stood out in the air...'
+2025-07-13 13:20:24,991 - routes.script - INFO - 🎯 ESSAY ANALYSIS - Specificity: 0.283, Multiplier: 0.80
+2025-07-13 13:20:24,991 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:20:25,094 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '8' (type: KeyError)
+2025-07-13 13:20:25,094 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('8',)
+2025-07-13 13:20:25,094 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:20:25,094 - llamaindex_rag.llamaindex_retrieval - INFO - Retrieved 4 results from course content
+2025-07-13 13:20:25,095 - llamaindex_rag.llamaindex_retrieval - INFO - Loading supporting_docs index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/faiss_index.index
+2025-07-13 13:20:25,095 - llamaindex_rag.llamaindex_retrieval - INFO - Loading supporting_docs nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/nodes.json
+2025-07-13 13:20:25,333 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp0pd_fmk9
+2025-07-13 13:20:25,552 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmpxz55kfvm.index
+2025-07-13 13:20:35,229 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 118 documents
+2025-07-13 13:20:35,248 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '6' (type: KeyError)
+2025-07-13 13:20:35,248 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('6',)
+2025-07-13 13:20:35,248 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:20:35,248 - llamaindex_rag.llamaindex_retrieval - INFO - Retrieved 3 results from supporting docs
+2025-07-13 13:20:35,248 - llamaindex_rag.llamaindex_retrieval - INFO - Dual retrieval completed: 4 course content + 3 supporting docs in 10.26s
+2025-07-13 13:20:35,248 - routes.script - INFO - 📖 Course content: 2938 chars, Supporting docs: 1269 chars
+2025-07-13 13:20:35,248 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:20:35,248 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:35,248 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:35,248 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:35,248 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:35,248 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Analysis of Sustainability and Competitive Superiority (Max: 30 points)**
+
+GRADING CRITERIA:
+• The essay clearly states Southwest's competitive advantage.
+• The essay provides evidence to support the sustainability of Southwest's competitive advantage.
+• The essay identifies potential challenges to Southwest's competitive advantage.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:35,249 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:36,993 - routes.script - INFO - Single essay - Criterion Analysis of Sustainability and Competitive Superiority: 22 -> 17.6 (x0.80)
+2025-07-13 13:20:36,993 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Application of Course Concepts
+2025-07-13 13:20:36,994 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:36,994 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:36,994 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:36,994 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:36,995 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Application of Course Concepts (Max: 5 points)**
+
+GRADING CRITERIA:
+• The essay accurately uses the Value Chain to analyze the company's activities.
+• The SWOT analysis is correctly applied to identify the company's strengths, weaknesses, opportunities, and threats.
+• The essay consistently uses Porter's Five Forces to examine the competitive environment.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:36,996 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:38,890 - routes.script - INFO - Single essay - Criterion Application of Course Concepts: 3 -> 2.4 (x0.80)
+2025-07-13 13:20:38,892 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Application of Porter's Five Forces Model
+2025-07-13 13:20:38,893 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:38,896 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:38,897 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:38,897 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:38,900 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Application of Porter's Five Forces Model (Max: 30 points)**
+
+GRADING CRITERIA:
+• Does the essay correctly identify Southwest Airlines' industry?
+• Are the five forces (threat of new entry, bargaining power of suppliers, bargaining power of buyers, threat of substitutes, and rivalry among competitors) accurately applied to Southwest Airlines?
+• Does the essay clearly explain how Southwest Airlines' unique structure and operations mitigate or leverage each of the five forces?
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:38,902 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:40,632 - routes.script - INFO - Single essay - Criterion Application of Porter's Five Forces Model: 18 -> 14.4 (x0.80)
+2025-07-13 13:20:40,633 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:20:40,633 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:40,634 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:40,634 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:40,634 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:40,634 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Explanation of Southwest's Organizational Culture and Human Resource Practices (Max: 30 points)**
+
+GRADING CRITERIA:
+• The essay accurately identifies Southwest's core values.
+• The essay clearly explains how Southwest's unique organizational culture supports its business model.
+• The essay provides specific examples of Southwest's human resource practices that contribute to its competitive advantage.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:40,635 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:42,298 - routes.script - INFO - Single essay - Criterion Explanation of Southwest's Organizational Culture and Human Resource Practices: 22 -> 17.6 (x0.80)
+2025-07-13 13:20:42,299 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Grammar
+2025-07-13 13:20:42,299 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:42,299 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:42,299 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:42,300 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:42,300 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Grammar (Max: 10 points)**
+
+GRADING CRITERIA:
+• Subject-verb agreement is correct in all sentences.
+• Tenses are consistent throughout the essay.
+• Punctuation is used correctly, with no errors.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:42,301 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:44,090 - routes.script - INFO - Single essay - Criterion Grammar: 7 -> 5.6 (x0.80)
+2025-07-13 13:20:44,091 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Value Chain Analysis 
+2025-07-13 13:20:44,092 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:20:44,092 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:20:44,092 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:20:44,092 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:20:44,093 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== ASSIGNMENT QUESTION ==========
+How has Southwest Airlines used its unique organizational culture and human resource practices to gain a competitive advantage in the airline industry, and do you think these practices are sustainable in the face of growing competition from United’s Shuttle and Continental Lite?
+========== END OF QUESTION ==========   
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+
+
+========== END OF STUDENT ESSAY ==========
+
+========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
+Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how firms compete. The source of a firm’s strengths and weaknesses can then be leveraged or minimized.
+In order to determine how firms remain competitive, it is important to understand how firms are structured. 
+As part of this process, Porter’s Five Forces model of industry competitiveness is applied for a detailed industry consideration.
+The internal environment of a firm is considered from a strengths and weaknesses perspective to relate internal strengths and weaknesses to opportunities and threats. This SWOT matrix method assists in identification of firm capabilities that can lead to a competitive advantage in the form of a special capability that is called a core competence.
+By the end of this lesson you will have the tools to examine a firm’s external and internal environments and analyze these to determine a firm’s capabilities that may yield a competitive advantage.
+ 
+
+ 
+
+
+“
+From the reading: "Note on the Value Chain: A Framework for Analyzing a Firm's Activities, WDI Publishing 3 pages”
+“Another strategy might lead to 10 percent lower costs and 5 percent lower price. Companies such as IKEA and Southwest have chosen this kind of structure. Where the net result of the configuration is positive, the strategy has, by definition, created competitive advantage.”
+From "Competitive Advantage, the value chain and your P&L, Applying Michael Porter's Value Chain Framework to your Business, Joan Magretta, 32 pages",
+ 
+
+
+Think about how external factors could eventually work with the value chain. Eg: supplier partnerships and procurement or inbound logistics. Toyota and Walmart are known for tight collaborations with suppliers. Delivery fleets, co-location and close relations (resources) enable for just in time delivery (capability).
+In the SWOT analysis template tool, parts of the value chain can be placed under resources or capabilities. The explicit diagram shown here is not required.
+Is just-in-time delivery a core competence?
+
+Valued by customers (yes, as the product is available quickly)
+Inimitable (it is hard to copy as it involves close relations with suppliers)
+Durable (mainly so if the partnerships are exclusive and long lasting)
+Extracts Value/Appropriability (yes, as lower inventory benefits the retailer (but not so much the supplier)
+Non-substitutable/Sustainability (yes, as there is no better way to achieve lean inventory)
+Better than the competition/Competitive Superiority (less so now than in the past as more firms are using just-in-time practices)
+
+Just-in-time is a potential strong basis for a competitive advantage, but its relative superiority depends upon the industry. As the practice has increasingly been adopted additional capabilities may be needed to maintain advantage.
+
+
+========== END OF COURSE CONTENT ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Value Chain Analysis (Max: 10 points)**
+
+GRADING CRITERIA:
+• Identify and describe Southwest Airlines' primary activities in its value chain.
+• Explain how Southwest Airlines' value chain activities create value for its customers.
+• Discuss how Southwest Airlines' value chain contributes to its sustainable competitive advantage.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
+- Course content contains the main materials (textbooks, lectures) for this assignment
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Base grading primarily on course content alignment
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:20:44,093 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:20:45,698 - routes.script - INFO - Single essay - Criterion Value Chain Analysis : 6 -> 4.8 (x0.80)
+2025-07-13 13:20:45,700 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:20:45] "POST /grade_single_essay HTTP/1.1" 200 -
+2025-07-13 13:23:35,324 - routes.generatePrompts - INFO - Generated prompt for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:23:36,203 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:23:36,777 - routes.generatePrompts - INFO - Generated prompt for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:23:37,786 - routes.generatePrompts - INFO - Generated prompt for criterion: Value Chain Analysis 
+2025-07-13 13:23:38,501 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Course Concepts
+2025-07-13 13:23:39,101 - routes.generatePrompts - INFO - Generated prompt for criterion: Grammar
+2025-07-13 13:23:39,102 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:23:39] "POST /generate_prompt HTTP/1.1" 200 -
+2025-07-13 13:24:16,691 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 13:24:16,702 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 13:24:18,643 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 13:24:18,643 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 13:24:18,643 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 13:24:18,955 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 13:24:18,955 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 13:24:18,955 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 13:24:18,955 - llamaindex_rag.llamaindex_document_processor - INFO - DocumentProcessor initialized
+2025-07-13 13:24:18,955 - llamaindex_rag.llamaindex_indexing - INFO - LlamaIndexIndexer initialized successfully
+2025-07-13 13:24:18,955 - routes.rag_pipeline - INFO - 🚀 LlamaIndex RAG system initialized successfully
+2025-07-13 13:24:18,955 - routes.rag_pipeline - INFO - 🚀 RetrievalEngine will use singleton pattern for optimal caching
+2025-07-13 13:24:18,966 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:6000
+2025-07-13 13:24:18,966 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-13 13:24:32,910 - routes.generatePrompts - INFO - Generated prompt for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:24:33,801 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:24:34,512 - routes.generatePrompts - INFO - Generated prompt for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:24:35,152 - routes.generatePrompts - INFO - Generated prompt for criterion: Value Chain Analysis 
+2025-07-13 13:24:35,945 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Course Concepts
+2025-07-13 13:24:36,580 - routes.generatePrompts - INFO - Generated prompt for criterion: Grammar
+2025-07-13 13:24:36,584 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:24:36] "POST /generate_prompt HTTP/1.1" 200 -
+2025-07-13 13:24:36,609 - routes.script - INFO - 🔍 DEBUG: About to analyze student essay: 'Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...'
+2025-07-13 13:24:36,609 - routes.script - INFO - 🔍 DEBUG: Assignment question: 'How has Southwest Airlines used its unique organizational culture and human resource practices to ga...'
+2025-07-13 13:24:36,609 - llamaindex_rag.llamaindex_retrieval - INFO - 🔄 Creating global RetrievalEngine singleton instance
+2025-07-13 13:24:36,669 - llamaindex_rag.llamaindex_core - INFO - Successfully connected to S3 bucket: essaybot
+2025-07-13 13:24:36,669 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-large-en
+2025-07-13 13:24:38,000 - sentence_transformers.SentenceTransformer - INFO - 2 prompts are loaded, with the keys: ['query', 'text']
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_core - INFO - Initialized embedding model: BAAI/bge-large-en
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_core - INFO - ✅ Initialized SemanticSplitterNodeParser - buffer_size: 2, threshold: 80% (academic paper optimized)
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_core - INFO - LlamaIndex service context configured successfully
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_core - INFO - Cache directory setup at: cache
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_core - INFO - RAG Pipeline Core initialized successfully
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_retrieval - INFO - RetrievalEngine initialized with smart query processor
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_retrieval - INFO - ✅ Global RetrievalEngine singleton instance created
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index
+2025-07-13 13:24:38,002 - llamaindex_rag.llamaindex_retrieval - INFO - Loading course_content nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json
+2025-07-13 13:24:38,133 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmpmaecuerp
+2025-07-13 13:24:38,264 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/course_content_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmpoqxhtf4v.index
+2025-07-13 13:24:41,949 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 46 documents
+2025-07-13 13:24:41,950 - routes.script - INFO - 🎯 ESSAY ANALYSIS - Text: 'Southwest Airlines has always stood out in the air...'
+2025-07-13 13:24:41,950 - routes.script - INFO - 🎯 ESSAY ANALYSIS - Specificity: 0.283, Multiplier: 0.80
+2025-07-13 13:24:41,950 - llamaindex_rag.llamaindex_retrieval - INFO - Using cached index and nodes for dash_user_686496f8b1107337eb5c0f96_68652d31fbdf1f11d3f79f98_course_content
+2025-07-13 13:24:42,006 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '8' (type: KeyError)
+2025-07-13 13:24:42,006 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('8',)
+2025-07-13 13:24:42,007 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:24:42,007 - llamaindex_rag.llamaindex_retrieval - INFO - Retrieved 4 results from course content
+2025-07-13 13:24:42,007 - llamaindex_rag.llamaindex_retrieval - INFO - Loading supporting_docs index from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/faiss_index.index
+2025-07-13 13:24:42,007 - llamaindex_rag.llamaindex_retrieval - INFO - Loading supporting_docs nodes from S3: dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/nodes.json
+2025-07-13 13:24:42,210 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/nodes.json to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmpg167wtpa
+2025-07-13 13:24:42,410 - llamaindex_rag.llamaindex_core - INFO - Downloaded dash_user/686496f8b1107337eb5c0f96/68652d31fbdf1f11d3f79f98/supporting_docs_index/faiss_index.index to /var/folders/l9/_qr4ygsx4q10m8tlwk5b28rr0000gn/T/tmp54lqn_yf.index
+2025-07-13 13:24:52,069 - llamaindex_rag.llamaindex_retrieval - INFO - Built TF-IDF index with 118 documents
+2025-07-13 13:24:52,088 - llamaindex_rag.llamaindex_retrieval - ERROR - Vector retrieval failed: '6' (type: KeyError)
+2025-07-13 13:24:52,088 - llamaindex_rag.llamaindex_retrieval - ERROR - Error details: ('6',)
+2025-07-13 13:24:52,088 - llamaindex_rag.llamaindex_retrieval - INFO - Vector search failed, using keyword-only results
+2025-07-13 13:24:52,089 - llamaindex_rag.llamaindex_retrieval - INFO - Retrieved 3 results from supporting docs
+2025-07-13 13:24:52,089 - llamaindex_rag.llamaindex_retrieval - INFO - Dual retrieval completed: 4 course content + 3 supporting docs in 10.14s
+2025-07-13 13:24:52,089 - routes.script - INFO - 📖 Course content: 2938 chars, Supporting docs: 1269 chars
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:52,089 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Analysis of Sustainability and Competitive Superiority (Max: 30 points)**
+
+GRADING CRITERIA:
+• The essay clearly states Southwest's unique competitive advantage.
+• The essay identifies specific challenges to Southwest's competitive advantage.
+• The essay provides evidence to support the sustainability of Southwest's competitive advantage.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:52,089 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:53,203 - routes.script - INFO - Single essay - Criterion Analysis of Sustainability and Competitive Superiority: 20 -> 16.0 (x0.80)
+2025-07-13 13:24:53,203 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Application of Course Concepts
+2025-07-13 13:24:53,203 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:53,203 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:53,203 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:53,203 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:53,203 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Application of Course Concepts (Max: 5 points)**
+
+GRADING CRITERIA:
+• Does the essay accurately define and explain key terms from the course?
+• Are relevant course concepts (e.g., Value Chain, Core Competence) consistently applied to support analysis?
+• Are SWOT analysis and Porter's Five Forces accurately used to frame the discussion?
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:53,204 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:54,380 - routes.script - INFO - Single essay - Criterion Application of Course Concepts: 2 -> 1.6 (x0.80)
+2025-07-13 13:24:54,381 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Application of Porter's Five Forces Model
+2025-07-13 13:24:54,381 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:54,381 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:54,381 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:54,381 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:54,382 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Application of Porter's Five Forces Model (Max: 30 points)**
+
+GRADING CRITERIA:
+• Does the essay identify and explain the five forces that affect Southwest Airlines' industry?
+• Is the essay clear about how Southwest Airlines' unique structure and operations impact each of the five forces?
+• Does the essay provide specific examples from Southwest Airlines to illustrate how the Five Forces model creates a competitive advantage?
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:54,382 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:55,673 - routes.script - INFO - Single essay - Criterion Application of Porter's Five Forces Model: 12 -> 9.6 (x0.80)
+2025-07-13 13:24:55,673 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:24:55,674 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:55,674 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:55,675 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:55,675 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:55,675 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Explanation of Southwest's Organizational Culture and Human Resource Practices (Max: 30 points)**
+
+GRADING CRITERIA:
+• The essay accurately identifies Southwest's core values and how they impact employee behavior.
+• The essay clearly explains how Southwest's unique organizational culture, such as its emphasis on employee empowerment, contributes to its competitive advantage.
+• The essay provides specific examples of Southwest's human resource practices, such as its open-seating policy, and explains how they support its organizational culture.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:55,676 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:56,768 - routes.script - INFO - Single essay - Criterion Explanation of Southwest's Organizational Culture and Human Resource Practices: 16 -> 12.8 (x0.80)
+2025-07-13 13:24:56,769 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Grammar
+2025-07-13 13:24:56,769 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:56,769 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:56,770 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:56,770 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:56,770 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Grammar (Max: 10 points)**
+
+GRADING CRITERIA:
+• Subject-verb agreement is consistently correct throughout the essay.
+• Tense consistency is maintained throughout the essay, without abrupt changes.
+• Commas are used correctly to separate items in lists and clauses.
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:56,771 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:57,659 - routes.script - INFO - Single essay - Criterion Grammar: 8 -> 6.4 (x0.80)
+2025-07-13 13:24:57,659 - routes.script - INFO - 🔍 SENDING TO LLM - Criterion: Value Chain Analysis 
+2025-07-13 13:24:57,660 - routes.script - INFO - 🔍 Course Context: Title: Week 2: Building a Competitive Advantage
+
+ 
+
+
+Building a Competitive Advantage
+Building a Competitive Advantage
+Overview:
+Understanding how firms are structured is essential to determining how ...
+2025-07-13 13:24:57,660 - routes.script - INFO - 🔍 Supporting Context: An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of...
+2025-07-13 13:24:57,660 - routes.script - INFO - 🔍 Essay in prompt: Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture...
+2025-07-13 13:24:57,660 - routes.script - INFO - 🔍 FULL PROMPT BEING SENT TO LLM:
+2025-07-13 13:24:57,660 - routes.script - INFO - 
+
+You are a {tone} academic essay grader with expertise in evaluating student work. 
+Provide fair, consistent scoring and constructive feedback based on the rubric.
+Do NOT use external knowledge or make up quotes.
+
+
+========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
+Southwest Airlines has always stood out in the airline industry due to its fun, people-first culture. Unlike traditional companies, Southwest puts a strong focus on hiring individuals with the right attitude—people who are team players and can bring humor, flexibility, and empathy to the workplace. Even flight attendants and pilots are expected to help with tasks like cleaning planes or assisting customers. These practices make the company more efficient and approachable, helping them maintain low operational costs while building strong relationships with both employees and customers. Their “no frills” model—no assigned seating, no meals, just peanuts and smiles—matches their casual and friendly brand.
+
+Still, staying on top isn’t easy. Big airlines like United and Continental are now trying to copy Southwest’s model by launching their own budget airlines. But what they lack is the internal spirit—Southwest’s employees see the company as a family and a mission. Culture isn’t something you can build overnight, and without trust, humor, and shared values, other airlines might struggle to truly match Southwest’s success. If Southwest keeps hiring the right people and adapting its culture as it grows, it’s got a good shot at staying ahead.
+
+========== END OF STUDENT ESSAY ==========
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{An old adage at Southw est was not to provoke their major competitors. 
+Obviously, they had done more than provoke them; they had challenged them directly. 
+ 
+Continental Lite 
+ 
+Under the guidance of CEO Bob Ferguson, Continental Airlines emerged from its second 
+bankruptcy in April 1993. In May, Ferguson announced his plan to split the company into two 
+operations; one that would concentrate on short-haul , low fare flights (named Continental Lite or 
+CALite), and the other that would feature first-class serv ice at business class prices. He believed 
+that because of its low  cost structure, lower even than Sout hwest, Continental would be able to 
+compete successfully. By imitating many of Sout hwest’s practices, including the use of humor 
+by flight attendants, Ferguson believed that he could attract the business traveler. By 
+concentrating primarily on the East Coast market , he could take advantage of greater density, 
+shorter flights, and avoid competing directly with Southwest, at least in the short-term. 
+ 
+Continental Lite was rolled out in October, 1993, with 173 daily departures from 14 cities. By 
+summer, it had expanded to 28 percent of Continen tal’s capacity, with plans to ultimately grow 
+to 40 percent. Fares were cut dramatically. }}
+========== END OF SUPPORTING DOCUMENTS ==========
+
+GRADING TASK: **Value Chain Analysis  (Max: 10 points)**
+
+GRADING CRITERIA:
+• Does the essay accurately identify Southwest Airlines' primary activities?
+• Are Southwest Airlines' support activities correctly identified and described?
+• Does the essay clearly explain how Southwest Airlines' value chain contributes to its competitive advantage?
+
+
+GRADING PRINCIPLES:
+- Grade based ONLY on those exact phrases from the student's writing
+- Reference specific parts of their essay in your feedback only if necessary
+- Be consistent with the rubric criteria and point allocation
+- Apply quality adjustments for response relevance and engagement
+- For responses that don't address the assignment: assign 0 points
+    
+
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content
+
+
+**For Moderate-Quality Responses:**
+- This response shows moderate engagement (quality score: 0.80)
+- Reference specific parts of their essay when giving feedback only if necessary
+- Identify what they did well and provide constructive feedback
+- Provide 1-2 concrete suggestions based on their actual content if required
+- Keep feedback between 50-60 words
+
+
+ABSOLUTE REQUIREMENTS:
+- Do NOT paraphrase or rewrite what the student said
+- Do NOT reference content not written by the student
+- If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
+
+Quality Level: 0.80 (affects final score)
+
+Return ONLY this JSON format:
+{"score": <number>, "feedback": <string>}
+
+2025-07-13 13:24:57,661 - routes.script - INFO - 🔍 END OF FULL PROMPT
+2025-07-13 13:24:58,887 - routes.script - INFO - Single essay - Criterion Value Chain Analysis : 6 -> 4.8 (x0.80)
+2025-07-13 13:24:58,890 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:24:58] "POST /grade_single_essay HTTP/1.1" 200 -
+2025-07-13 13:29:44,949 - routes.generatePrompts - INFO - Generated prompt for criterion: Explanation of Southwest's Organizational Culture and Human Resource Practices
+2025-07-13 13:29:45,813 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Porter's Five Forces Model
+2025-07-13 13:29:46,530 - routes.generatePrompts - INFO - Generated prompt for criterion: Analysis of Sustainability and Competitive Superiority
+2025-07-13 13:29:47,162 - routes.generatePrompts - INFO - Generated prompt for criterion: Value Chain Analysis 
+2025-07-13 13:29:47,800 - routes.generatePrompts - INFO - Generated prompt for criterion: Application of Course Concepts
+2025-07-13 13:29:48,351 - routes.generatePrompts - INFO - Generated prompt for criterion: Grammar
+2025-07-13 13:29:48,352 - werkzeug - INFO - 127.0.0.1 - - [13/Jul/2025 13:29:48] "POST /generate_prompt HTTP/1.1" 200 -

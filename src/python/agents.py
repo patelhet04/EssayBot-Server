@@ -63,17 +63,9 @@ def _create_prompt_template(prompt_data, instructions, feedback_instructions, qu
     template = f"""
 {ROLE_DESCRIPTION}
 
-========== ASSIGNMENT QUESTION ==========
-{{{{question}}}}
-========== END OF QUESTION ==========   
-
 ========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
 {{{{essay}}}}
-========== END OF STUDENT ESSAY ==========
-
-========== COURSE CONTENT (PRIMARY GRADING SOURCE) ==========
-{{{{course_context}}}}
-========== END OF COURSE CONTENT =========="""
+========== END OF STUDENT ESSAY =========="""
 
     # Conditionally add supporting docs section
     if has_supporting_docs:
@@ -94,8 +86,9 @@ GRADING CRITERIA:
 {GRADING_PRINCIPLES}    
 
 CONTEXT USAGE INSTRUCTIONS:
-- Use COURSE CONTENT as your PRIMARY SOURCE for grading criteria and standards
-- Course content contains the main materials (textbooks, lectures) for this assignment"""
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay"""
 
     if has_supporting_docs:
         template += """
@@ -110,7 +103,8 @@ ABSOLUTE REQUIREMENTS:
 - Do NOT paraphrase or rewrite what the student said
 - Do NOT reference content not written by the student
 - If student essay doesn't address the criteria, say so directly
-- Base grading primarily on course content alignment
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
 
 Quality Level: {quality_multiplier:.2f} (affects final score){quality_note}
 
