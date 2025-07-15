@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5001/api/generate"
+LLM_API_URL = os.getenv("OLLAMA_URL", "http://localhost:5001/api/generate")
 
 
 def send_post_request(prompt, temperature=0.3, top_p=0.1, max_tokens=2048, model="llama3.1:8b"):

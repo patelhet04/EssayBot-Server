@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 singleGrading_bp = Blueprint("singleGrading", __name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5001/api/generate"
+LLM_API_URL = os.getenv("OLLAMA_URL", "http://localhost:5001/api/generate")
 
 
 def send_post_request(prompt, temperature=0.2, top_p=0.1, max_tokens=2048, model="llama3.1:8b"):
@@ -75,7 +75,8 @@ def grade_single_essay():
                             "prompt": parsed_prompt
                         })
                     except json.JSONDecodeError as e:
-                        logger.error(f"Failed to parse prompt for criterion {criterion_name}: {e}")
+                        logger.error(
+                            f"Failed to parse prompt for criterion {criterion_name}: {e}")
                         # Use a default prompt structure
                         parsed_config_prompt.append({
                             "criterionName": criterion_name,

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 rubric_bp = Blueprint("rubric", __name__)
 
 # Local LLM API configuration
-API_URL = "http://localhost:5001/api/generate"
+API_URL = os.getenv("OLLAMA_URL", "http://localhost:5001/api/generate")
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_TOP_P = 0.9
 DEFAULT_MAX_TOKENS = 4000
@@ -128,7 +128,7 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
                             "partial": "Satisfactory performance in this criterion.",
                             "minimal": "Minimal performance in this criterion."
                         }
-                    
+
                     # Clean scoring levels to remove any labels
                     if "scoringLevels" in criterion and isinstance(criterion["scoringLevels"], dict):
                         def clean_text(text):
@@ -136,11 +136,12 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
                                 return ""
                             # Remove common labels that might be included
                             return re.sub(r'^(Full Points?|Partial Points?|Minimal Points?):\s*', '', text, flags=re.IGNORECASE).strip()
-                        
+
                         for level in ["full", "partial", "minimal"]:
                             if level in criterion["scoringLevels"]:
-                                criterion["scoringLevels"][level] = clean_text(criterion["scoringLevels"][level])
-                    
+                                criterion["scoringLevels"][level] = clean_text(
+                                    criterion["scoringLevels"][level])
+
                     if "weight" not in criterion or not isinstance(criterion["weight"], (int, float)):
                         criterion["weight"] = 100 // len(
                             rubric_json["criteria"])
@@ -185,14 +186,16 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
 
 def generate_criteria_expectations(criteria_name: str, criteria_description: str, question: str, context: List[str], bracket_labels: List[str], model: str = "llama3.3:70b") -> Dict[str, str]:
     """Generate expectations for a single criterion based on its name and description, for arbitrary bracket labels."""
-    logger.info(f"Generating expectations for criterion: {criteria_name} using model: {model}...")
+    logger.info(
+        f"Generating expectations for criterion: {criteria_name} using model: {model}...")
     try:
         context_text = ' '.join(context)
         # Dynamically build the bracket instructions
         bracket_instructions = "\n".join([
             f"{i+1}. **{label}**: What constitutes {label.lower()} performance for this criterion" for i, label in enumerate(bracket_labels)
         ])
-        bracket_json = ",\n".join([f'  "{label}": "Description for {label} performance"' for label in bracket_labels])
+        bracket_json = ",\n".join(
+            [f'  "{label}": "Description for {label} performance"' for label in bracket_labels])
         prompt = f"""
         You are an expert educational assessment designer. Your task is to generate specific expectations for a grading criterion.
 
@@ -238,16 +241,19 @@ def generate_criteria_expectations(criteria_name: str, criteria_description: str
                 for label in bracket_labels:
                     if label not in expectations_json or not expectations_json[label]:
                         expectations_json[label] = f"Default {label} expectation for {criteria_name}"
-                logger.info(f"Successfully generated expectations for criterion: {criteria_name}")
+                logger.info(
+                    f"Successfully generated expectations for criterion: {criteria_name}")
                 return expectations_json
             except json.JSONDecodeError as e:
-                logger.error(f"Error parsing JSON from model response: {str(e)}")
+                logger.error(
+                    f"Error parsing JSON from model response: {str(e)}")
                 raise
         else:
             logger.error("Could not find valid JSON in model response")
             raise ValueError("No valid JSON found in response")
     except Exception as e:
-        logger.error(f"Error generating expectations for criterion {criteria_name}: {str(e)}")
+        logger.error(
+            f"Error generating expectations for criterion {criteria_name}: {str(e)}")
         return {label: f"Default {label} expectation for {criteria_name}" for label in bracket_labels}
 
 

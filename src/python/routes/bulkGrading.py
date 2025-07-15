@@ -45,7 +45,7 @@ class GradingProgress:
 bulkGrading_bp = Blueprint("bulkGrading", __name__)
 
 # LLM API settings
-LLM_API_URL = "http://localhost:5001/api/generate"
+LLM_API_URL = os.getenv("OLLAMA_URL", "http://localhost:5001/api/generate")
 s3_client = boto3.client(
     "s3",
     endpoint_url=os.getenv("MINIO_ENDPOINT", "http://127.0.0.1:9000"),
@@ -113,7 +113,8 @@ def grade_essay_sync(
                             "prompt": parsed_prompt
                         })
                     except json.JSONDecodeError as e:
-                        logger.error(f"Failed to parse prompt for criterion {criterion_name}: {e}")
+                        logger.error(
+                            f"Failed to parse prompt for criterion {criterion_name}: {e}")
                         # Use a default prompt structure
                         parsed_config_prompt.append({
                             "criterionName": criterion_name,
