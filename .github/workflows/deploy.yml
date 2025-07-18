@@ -1,0 +1,99 @@
+name: Deploy EssayBot Backend
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to On-Prem Server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            echo "🚀 Starting EssayBot Backend deployment..."
+
+            # Navigate to project directory
+            cd ${{ secrets.PROJECT_PATH || '/opt/EssayBot' }}
+
+            # Pull latest code
+            echo "📥 Pulling latest code..."
+            git pull origin main
+
+            # Backend (Node.js) setup
+            echo "🔧 Setting up Node.js backend..."
+            cd EssayBot-Server
+            npm install
+
+            # Python (Flask) setup
+            echo "🐍 Setting up Python environment..."
+            cd src/python
+
+            # Create virtual environment if it doesn't exist
+            if [ ! -d "venv" ]; then
+              echo "Creating Python virtual environment..."
+              python3 -m venv venv
+            fi
+
+            # Activate virtual environment and install dependencies
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+            # Go back to server root
+            cd ../..
+
+                        # Stop existing processes
+            echo "🔄 Restarting services..."
+            pm2 stop essaybot-express && pm2 delete essaybot-express || true
+            pm2 stop essaybot-flask && pm2 delete essaybot-flask || true
+
+            # Start applications with simple PM2 commands
+            echo "🚀 Starting applications..."
+
+            # Start Express.js with simple command
+            echo "Starting Express.js on port 8000..."
+            PORT=8000 pm2 start "npx ts-node src/index.ts" --name essaybot-express
+
+            # Start Flask with original working config style
+            echo "Starting Flask on port 6000..."
+            FLASK_PORT=6000 pm2 start src/python/app.py --name essaybot-flask --interpreter src/python/venv/bin/python
+
+            # Save PM2 configuration
+            pm2 save
+
+                        # Health check
+            echo "🏥 Performing health checks..."
+            sleep 5
+
+            # Check if services are running
+            if pm2 list | grep -q "essaybot-express.*online"; then
+              echo "✅ Express.js service is running"
+            else
+              echo "❌ Express.js service failed to start"
+              exit 1
+            fi
+
+            if pm2 list | grep -q "essaybot-flask.*online"; then
+              echo "✅ Flask service is running"
+            else
+              echo "❌ Flask service failed to start"
+              exit 1
+            fi
+
+            echo "✅ Backend deployment complete!"
+            echo "🟢 Express.js running on port 8000"
+            echo "🐍 Flask running on port 6000"
+            pm2 status
