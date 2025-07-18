@@ -192,6 +192,12 @@ export const finalizeRubricAndGeneratePrompt = async (
     const cleanedData = cleanPromptsResponse(response.data);
 
     console.log("Cleaned Grading Result:", cleanedData);
+    if (cleanedData && cleanedData.criteria_prompts) {
+      console.log("Prompt generation summary:");
+      cleanedData.criteria_prompts.forEach(cp => {
+        console.log(`Prompt generated for criterion: ${cp.criterionName}`);
+      });
+    }
 
     // Step 5: Update the assignment with the generated prompts
     assignment.config_prompt = cleanedData.criteria_prompts;

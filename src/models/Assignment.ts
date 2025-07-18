@@ -11,11 +11,12 @@ interface Criterion {
   name: string;
   description: string;
   weight: number;
-  scoringLevels: ScoringLevels;
+  scoringLevels: string[];
   subCriteria: Criterion[];
 }
 
 interface RubricConfig {
+  gradingBrackets: { label: string; range: string }[];
   criteria: Criterion[];
 }
 
@@ -63,6 +64,10 @@ const assignmentSchema = new Schema<IAssignment>({
   question: { type: String },
   course: { type: Schema.Types.ObjectId, ref: "Course", required: true },
   config_rubric: {
+    gradingBrackets: {
+      type: [Schema.Types.Mixed],
+      required: false,
+    },
     criteria: {
       type: [Schema.Types.Mixed],
       required: true,

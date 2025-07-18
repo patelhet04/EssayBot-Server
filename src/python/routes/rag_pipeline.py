@@ -148,10 +148,14 @@ def index_multiple_documents():
 # Legacy compatibility function for existing routes
 def retrieve_relevant_text(query: str, k: int = 10, professor_username: str = None,
                            course_id: str = None, assignmentTitle: str = None,
-                           distance_threshold: float = 0.5, max_total_length: int = 4000):
+                           distance_threshold: float = 0.5, max_total_length: int = 4000,
+                           index_type: str = "course_content"):
     """
     Legacy compatibility function for existing routes.
-    Uses the new LlamaIndex retrieval system.
+    Uses the new LlamaIndex retrieval system with specified index type.
+
+    Args:
+        index_type: "course_content" or "supporting_docs". Default "course_content" for rubric generation.
     """
     if not LLAMAINDEX_AVAILABLE:
         raise ValueError("LlamaIndex RAG system not available")
@@ -166,14 +170,15 @@ def retrieve_relevant_text(query: str, k: int = 10, professor_username: str = No
         # ⚡ PERMANENT FIX: Use global singleton - no more downloads every request!
         retriever = get_retrieval_engine()
 
-        # Perform retrieval using hybrid mode (best for general use)
+        # Perform retrieval using hybrid mode with specified index type
         results = retriever.retrieve(
             query=query,
             professor_username=professor_username,
             course_id=course_id,
             assignment_title=assignmentTitle,
             mode=RetrievalMode.HYBRID,
-            top_k=k
+            top_k=k,
+            index_type=index_type
         )
 
         # Extract text chunks for legacy compatibility
@@ -193,16 +198,17 @@ def retrieve_relevant_text(query: str, k: int = 10, professor_username: str = No
                 total_length += chunk_length
 
             logger.info(
-                f"📖 Legacy retrieval: {len(text_chunks)} chunks, {total_length} chars")
+                f"📖 Legacy retrieval ({index_type}): {len(text_chunks)} chunks, {total_length} chars")
             return text_chunks
         else:
             logger.warning(
-                f"📖 Legacy retrieval: No results for query: {query[:50]}...")
+                f"📖 Legacy retrieval ({index_type}): No results for query: {query[:50]}...")
             return []
 
     except Exception as e:
-        logger.error(f"❌ Legacy retrieval failed: {str(e)}")
-        raise ValueError(f"Failed to retrieve relevant text: {str(e)}")
+        logger.error(f"❌ Legacy retrieval ({index_type}) failed: {str(e)}")
+        raise ValueError(
+            f"Failed to retrieve relevant text from {index_type}: {str(e)}")
 
 
 # Legacy compatibility function - not needed anymore but kept for compatibility
@@ -214,3 +220,87 @@ def get_faiss_index_from_s3(index_key: str):
     raise ValueError(
         "get_faiss_index_from_s3 is deprecated. Use LlamaIndex retrieval system instead."
     )
+
+
+@rag_bp.route("/index-content-specifications", methods=["POST"])
+def index_content_specifications():
+
+    if not LLAMAINDEX_AVAILABLE or not llamaindex_indexer:
+        return jsonify({"error": "LlamaIndex RAG system not available"}), 503
+
+    try:
+        data = request.get_json()
+        content_specifications = data.get("contentSpecifications")
+        professor_username = data.get("username")
+        course_id = data.get("courseId")
+        # Using assignmentId as assignment_title
+        assignment_title = data.get("assignmentId")
+
+        if not all([content_specifications, professor_username, course_id, assignment_title]):
+            return jsonify({
+                "error": "contentSpecifications, username, courseId, and assignmentId are required"
+            }), 400
+
+        if not isinstance(content_specifications, list) or len(content_specifications) == 0:
+            return jsonify({"error": "contentSpecifications must be a non-empty array"}), 400
+
+        logger.info(
+            f"🚀 Processing {len(content_specifications)} content specifications for {professor_username}")
+
+        # Process content specifications with dual indexing
+        result = llamaindex_indexer.index_content_specifications(
+            content_specifications=content_specifications,
+            professor_username=professor_username,
+            course_id=course_id,
+            assignment_title=assignment_title
+        )
+
+        if result["success"]:
+            logger.info(
+                f"✅ Successfully processed content specifications in {result['processing_time']:.2f}s")
+
+            # Format response for frontend
+            response_data = {
+                "success": True,
+                "processing_time": result["processing_time"],
+                "indexing_strategy": result["indexing_strategy"],
+                "course_id": course_id,
+                "assignment_title": assignment_title,
+                "indices_created": {},
+                "processing_summary": result["processing_summary"]
+            }
+
+            # Add course content index info if created
+            if result["course_content_index"]:
+                response_data["indices_created"]["course_content"] = {
+                    "faiss_index_url": result["course_content_index"]["faiss_index_url"],
+                    "nodes_url": result["course_content_index"]["nodes_url"],
+                    "metadata_url": result["course_content_index"]["metadata_url"],
+                    "total_nodes": result["course_content_index"]["total_nodes"],
+                    "total_documents": result["course_content_index"]["total_documents"]
+                }
+
+            # Add supporting docs index info if created
+            if result["supporting_docs_index"]:
+                response_data["indices_created"]["supporting_docs"] = {
+                    "faiss_index_url": result["supporting_docs_index"]["faiss_index_url"],
+                    "nodes_url": result["supporting_docs_index"]["nodes_url"],
+                    "metadata_url": result["supporting_docs_index"]["metadata_url"],
+                    "total_nodes": result["supporting_docs_index"]["total_nodes"],
+                    "total_documents": result["supporting_docs_index"]["total_documents"]
+                }
+
+            return jsonify(response_data), 200
+        else:
+            logger.error(
+                f"❌ Content specifications processing failed: {result['error_message']}")
+            return jsonify({
+                "success": False,
+                "error": result["error_message"],
+                "processing_time": result["processing_time"],
+                "indexing_strategy": result["indexing_strategy"]
+            }), 500
+
+    except Exception as e:
+        logger.error(f"❌ Content specifications processing failed: {str(e)}")
+        return jsonify({"error": f"Processing failed: {str(e)}"}), 500

@@ -56,22 +56,27 @@ def get_quality_analysis_note(quality_multiplier, specificity_score):
         return ""
 
 
-def _create_prompt_template(prompt_data, instructions, feedback_instructions, quality_multiplier, quality_note):
+def _create_prompt_template(prompt_data, instructions, feedback_instructions, quality_multiplier, quality_note, has_supporting_docs=False):
     """Create the standardized prompt template to eliminate duplication."""
-    return f"""
-{ROLE_DESCRIPTION}
 
-========== ASSIGNMENT QUESTION ==========
-{{{{question}}}}
-========== END OF QUESTION ==========   
+    # Base template with course content
+    template = f"""
+{ROLE_DESCRIPTION}
 
 ========== STUDENT ESSAY (ONLY SOURCE FOR QUOTES) ==========
 {{{{essay}}}}
-========== END OF STUDENT ESSAY ==========
+========== END OF STUDENT ESSAY =========="""
 
-========== COURSE MATERIAL (REFERENCE ONLY) ==========
-{{{{rag_context}}}}
-========== END OF COURSE MATERIAL ==========
+    # Conditionally add supporting docs section
+    if has_supporting_docs:
+        template += """
+
+========== SUPPORTING DOCUMENTS (FACT-CHECKING & REFERENCE) ==========
+{{{{supporting_context}}}}
+========== END OF SUPPORTING DOCUMENTS =========="""
+
+    # Continue with the rest of the template
+    template += f"""
 
 GRADING TASK: {prompt_data['prompt']['header']}
 
@@ -80,12 +85,26 @@ GRADING CRITERIA:
 
 {GRADING_PRINCIPLES}    
 
+CONTEXT USAGE INSTRUCTIONS:
+- Focus EXCLUSIVELY on the specific criterion being graded
+- Do NOT reference the assignment question or course content
+- Grade based ONLY on the criterion requirements and the student's essay"""
+
+    if has_supporting_docs:
+        template += """
+- Use SUPPORTING DOCUMENTS for fact-checking and additional context only
+- Supporting documents provide supplementary information but should not override course content"""
+
+    template += f"""
+
 {feedback_instructions}
 
 ABSOLUTE REQUIREMENTS:
 - Do NOT paraphrase or rewrite what the student said
 - Do NOT reference content not written by the student
 - If student essay doesn't address the criteria, say so directly
+- Focus ONLY on the specific criterion being graded
+- Do NOT reference assignment topic or course content in feedback
 
 Quality Level: {quality_multiplier:.2f} (affects final score){quality_note}
 
@@ -93,14 +112,17 @@ Return ONLY this JSON format:
 {{"score": <number>, "feedback": <string>}}
 """
 
+    return template
 
-def get_prompt(criteria_prompts, criterion_name=None, tone="moderate", quality_multiplier=1.0, specificity_score=0.5):
+
+def get_prompt(criteria_prompts, criterion_name=None, tone="moderate", quality_multiplier=1.0, specificity_score=0.5, has_supporting_docs=False):
     """
     Assembles prompts with smart gibberish detection and quality-aware scoring.
 
     Args:
         quality_multiplier (float): 0.6 for gibberish, 1.0 neutral, 1.2 for excellent (from LlamaIndex analysis)
         specificity_score (float): 0.0-1.0 specificity score from DynamicQueryProcessor
+        has_supporting_docs (bool): Whether supporting documents are available
     """
     if not criteria_prompts:
         return None
@@ -135,7 +157,8 @@ def get_prompt(criteria_prompts, criterion_name=None, tone="moderate", quality_m
             instructions=instructions,
             feedback_instructions=feedback_instructions,
             quality_multiplier=quality_multiplier,
-            quality_note=quality_note
+            quality_note=quality_note,
+            has_supporting_docs=has_supporting_docs
         )
         return {
             "prompt": full_prompt
@@ -153,7 +176,8 @@ def get_prompt(criteria_prompts, criterion_name=None, tone="moderate", quality_m
             instructions=instructions,
             feedback_instructions=feedback_instructions,
             quality_multiplier=quality_multiplier,
-            quality_note=quality_note
+            quality_note=quality_note,
+            has_supporting_docs=has_supporting_docs
         )
         assembled_prompts[criterion_name] = {
             "prompt": full_prompt

@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class PDFExtractor:
-    """Enhanced PDF text extraction with multiple fallback methods."""
+    """Enhanced PDF text extraction with fallback methods and page-level extraction support."""
 
     def __init__(self):
         self.extraction_methods = [
@@ -41,6 +41,71 @@ class PDFExtractor:
             self._extract_with_pymupdf,
             self._extract_with_pypdf2
         ]
+
+    def extract_text_from_file(self, file_path: str, file_name: str) -> Tuple[str, Dict[str, Any]]:
+        """
+        Extract text from file based on its type.
+
+        Args:
+            file_path: Path to the downloaded file
+            file_name: Original file name to determine type
+
+        Returns:
+            Tuple of (extracted_text, metadata)
+        """
+        file_extension = file_name.lower().split('.')[-1]
+
+        if file_extension == 'txt':
+            return self._extract_from_txt(file_path)
+        else:
+            # Assume PDF/DOC/DOCX for other files
+            return self.extract_text(file_path)
+
+    def _extract_from_txt(self, file_path: str) -> Tuple[str, Dict[str, Any]]:
+        """Extract text from TXT file."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+
+            metadata = {
+                "extraction_method": "direct_txt_read",
+                "total_pages": 1,  # TXT files don't have pages
+                "success": True,
+                "character_count": len(text),
+                "word_count": len(text.split())
+            }
+
+            logger.info(
+                f"Successfully extracted {len(text)} characters from TXT file")
+            return text, metadata
+
+        except UnicodeDecodeError:
+            # Try different encodings
+            for encoding in ['latin-1', 'cp1252', 'iso-8859-1']:
+                try:
+                    with open(file_path, 'r', encoding=encoding) as f:
+                        text = f.read()
+
+                    metadata = {
+                        "extraction_method": f"txt_read_{encoding}",
+                        "total_pages": 1,
+                        "success": True,
+                        "character_count": len(text),
+                        "word_count": len(text.split())
+                    }
+
+                    logger.info(
+                        f"Successfully extracted {len(text)} characters from TXT file using {encoding}")
+                    return text, metadata
+                except UnicodeDecodeError:
+                    continue
+
+            raise ValueError(
+                "Could not decode TXT file with any supported encoding")
+
+        except Exception as e:
+            logger.error(f"Failed to extract text from TXT file: {str(e)}")
+            raise
 
     def extract_text(self, file_path: str) -> Tuple[str, Dict[str, Any]]:
         """
@@ -81,6 +146,124 @@ class PDFExtractor:
         # If all methods fail
         metadata["extraction_time"] = time.time() - start_time
         raise ValueError("All PDF extraction methods failed")
+
+    def extract_specific_pages(self, file_path: str, page_ranges: str) -> Tuple[str, Dict[str, Any]]:
+        """
+        Extract text from specific pages of a PDF.
+
+        Args:
+            file_path: Path to PDF file
+            page_ranges: String like "1-5, 12-20, 25" (1-indexed)
+
+        Returns:
+            (extracted_text, metadata)
+        """
+        start_time = time.time()
+
+        try:
+            # Parse page ranges
+            page_numbers = self._parse_page_ranges(page_ranges)
+            logger.info(f"Extracting pages: {page_numbers}")
+
+            # Extract using pdfplumber (most reliable for specific pages)
+            text_parts = []
+            metadata = {"page_count": 0,
+                        "extracted_pages": page_numbers, "tables_found": 0}
+
+            with pdfplumber.open(file_path) as pdf:
+                total_pages = len(pdf.pages)
+                metadata["total_pages_in_document"] = total_pages
+
+                # Validate page numbers
+                valid_pages = [
+                    p for p in page_numbers if 1 <= p <= total_pages]
+                invalid_pages = [
+                    p for p in page_numbers if p < 1 or p > total_pages]
+
+                if invalid_pages:
+                    logger.warning(
+                        f"Invalid page numbers (will skip): {invalid_pages}")
+
+                metadata["valid_pages"] = valid_pages
+                metadata["invalid_pages"] = invalid_pages
+
+                for page_num in valid_pages:
+                    try:
+                        page = pdf.pages[page_num - 1]  # Convert to 0-indexed
+                        page_text = page.extract_text()
+
+                        if page_text:
+                            page_text = self._clean_page_text(
+                                page_text, page_num)
+                            text_parts.append(
+                                f"[Page {page_num}]\n{page_text}")
+                            metadata["page_count"] += 1
+
+                        # Count tables
+                        tables = page.extract_tables()
+                        if tables:
+                            metadata["tables_found"] += len(tables)
+
+                    except Exception as e:
+                        logger.warning(
+                            f"Failed to extract page {page_num}: {str(e)}")
+                        continue
+
+            extracted_text = "\n\n".join(text_parts)
+            metadata["extraction_time"] = time.time() - start_time
+            metadata["extraction_success"] = True
+            metadata["extraction_method"] = "pdfplumber_specific_pages"
+
+            if not extracted_text:
+                raise ValueError(
+                    f"No text extracted from specified pages: {page_ranges}")
+
+            logger.info(
+                f"Successfully extracted {len(extracted_text)} characters from {metadata['page_count']} pages")
+            return extracted_text, metadata
+
+        except Exception as e:
+            metadata["extraction_time"] = time.time() - start_time
+            metadata["extraction_success"] = False
+            logger.error(
+                f"Failed to extract specific pages {page_ranges}: {str(e)}")
+            raise ValueError(
+                f"Failed to extract pages {page_ranges}: {str(e)}")
+
+    def _parse_page_ranges(self, page_ranges: str) -> List[int]:
+        """
+        Parse page range string into list of page numbers.
+
+        Examples:
+            "1-5, 12-20, 25" -> [1, 2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25]
+            "1, 3, 5-7" -> [1, 3, 5, 6, 7]
+        """
+        page_numbers = []
+
+        # Split by comma and process each part
+        parts = [part.strip() for part in page_ranges.split(',')]
+
+        for part in parts:
+            if '-' in part:
+                # Handle range like "1-5"
+                try:
+                    start, end = part.split('-')
+                    start = int(start.strip())
+                    end = int(end.strip())
+                    page_numbers.extend(range(start, end + 1))
+                except ValueError:
+                    logger.warning(f"Invalid page range: {part}")
+                    continue
+            else:
+                # Handle single page like "25"
+                try:
+                    page_numbers.append(int(part.strip()))
+                except ValueError:
+                    logger.warning(f"Invalid page number: {part}")
+                    continue
+
+        # Remove duplicates and sort
+        return sorted(list(set(page_numbers)))
 
     def _extract_with_pdfplumber(self, file_path: str) -> Tuple[str, Dict[str, Any]]:
         """Extract text using pdfplumber (most reliable for academic papers)."""
@@ -233,9 +416,9 @@ class DocumentProcessor:
                     }
                 )
 
-                # Process document and create index
+                # Process document and create index (legacy single document)
                 result = self._create_index_from_documents(
-                    [document], cache_key, professor_username, course_id, assignment_title
+                    [document], cache_key, professor_username, course_id, assignment_title, "legacy"
                 )
 
                 result.update({
@@ -329,9 +512,9 @@ class DocumentProcessor:
             if not documents:
                 raise ValueError("No documents were successfully processed")
 
-            # Create combined index
+            # Create combined index (legacy multiple documents)
             result = self._create_index_from_documents(
-                documents, cache_key, professor_username, course_id, assignment_title
+                documents, cache_key, professor_username, course_id, assignment_title, "legacy"
             )
 
             result.update({
@@ -359,7 +542,8 @@ class DocumentProcessor:
         cache_key: str,
         professor_username: str,
         course_id: str,
-        assignment_title: str
+        assignment_title: str,
+        index_type: str
     ) -> Dict[str, Any]:
         """Create FAISS index from processed documents."""
         try:
@@ -418,7 +602,7 @@ class DocumentProcessor:
 
             # Save to S3
             result = self._save_index_to_s3(
-                vector_index, valid_nodes, professor_username, course_id, assignment_title
+                vector_index, valid_nodes, professor_username, course_id, assignment_title, index_type
             )
 
             # Cache locally if enabled
@@ -475,16 +659,25 @@ class DocumentProcessor:
         nodes: List[BaseNode],
         professor_username: str,
         course_id: str,
-        assignment_title: str
+        assignment_title: str,
+        index_type: str
     ) -> Dict[str, Any]:
         """Save FAISS index and nodes to S3."""
         try:
-            # Generate S3 paths
+            # Generate S3 paths based on index type
             base_path = self.core.get_document_path(
                 professor_username, course_id, assignment_title)
-            index_key = f"{base_path}/faiss_index.index"
-            nodes_key = f"{base_path}/nodes.json"
-            metadata_key = f"{base_path}/index_metadata.json"
+
+            if index_type == "legacy":
+                # Original single index structure (backward compatibility)
+                index_path = base_path
+            else:
+                # Dual index structure: course_content_index/ or supporting_docs_index/
+                index_path = f"{base_path}/{index_type}_index"
+
+            index_key = f"{index_path}/faiss_index.index"
+            nodes_key = f"{index_path}/nodes.json"
+            metadata_key = f"{index_path}/index_metadata.json"
 
             # Save FAISS index
             with temporary_file(suffix=".index") as temp_index_path:
@@ -524,6 +717,7 @@ class DocumentProcessor:
                 "professor_username": professor_username,
                 "course_id": course_id,
                 "assignment_title": assignment_title,
+                "index_type": index_type,
                 "index_key": index_key,
                 "nodes_key": nodes_key,
                 "total_nodes": len(nodes),
@@ -593,3 +787,234 @@ class DocumentProcessor:
         except Exception as e:
             logger.error(f"Error getting processing stats: {str(e)}")
             return {"error": str(e)}
+
+    def process_content_specifications(
+        self,
+        content_specifications: List[Dict[str, Any]],
+        professor_username: str,
+        course_id: str,
+        assignment_title: str
+    ) -> Dict[str, Any]:
+        """
+        Process documents based on content specifications with dual indexing.
+
+        Args:
+            content_specifications: List of file specifications from frontend
+            professor_username: Professor's username
+            course_id: Course identifier
+            assignment_title: Assignment title
+
+        Returns:
+            Dictionary with processing results for both indices
+        """
+        try:
+            logger.info(
+                f"Processing {len(content_specifications)} content specifications")
+
+            # Separate course content and supporting docs
+            course_content_specs = [
+                spec for spec in content_specifications
+                if spec.get("fileType") == "course_content"
+            ]
+            supporting_docs_specs = [
+                spec for spec in content_specifications
+                if spec.get("fileType") == "supporting_docs"
+            ]
+
+            logger.info(f"Course content files: {len(course_content_specs)}")
+            logger.info(f"Supporting docs files: {len(supporting_docs_specs)}")
+
+            results = {
+                "course_content_index": None,
+                "supporting_docs_index": None,
+                "processing_summary": {
+                    "total_files": len(content_specifications),
+                    "course_content_files": len(course_content_specs),
+                    "supporting_docs_files": len(supporting_docs_specs),
+                    "errors": []
+                }
+            }
+
+            # Process course content files
+            if course_content_specs:
+                try:
+                    course_content_result = self._process_file_specifications(
+                        course_content_specs,
+                        "course_content",
+                        professor_username,
+                        course_id,
+                        assignment_title
+                    )
+                    results["course_content_index"] = course_content_result
+                    logger.info("✅ Course content index created successfully")
+                except Exception as e:
+                    error_msg = f"Failed to create course content index: {str(e)}"
+                    logger.error(error_msg)
+                    results["processing_summary"]["errors"].append(error_msg)
+
+            # Process supporting docs files
+            if supporting_docs_specs:
+                try:
+                    supporting_docs_result = self._process_file_specifications(
+                        supporting_docs_specs,
+                        "supporting_docs",
+                        professor_username,
+                        course_id,
+                        assignment_title
+                    )
+                    results["supporting_docs_index"] = supporting_docs_result
+                    logger.info("✅ Supporting docs index created successfully")
+                except Exception as e:
+                    error_msg = f"Failed to create supporting docs index: {str(e)}"
+                    logger.error(error_msg)
+                    results["processing_summary"]["errors"].append(error_msg)
+
+            # Check if at least one index was created
+            if not results["course_content_index"] and not results["supporting_docs_index"]:
+                raise ValueError("Failed to create any indices")
+
+            logger.info(f"Successfully processed content specifications")
+            return results
+
+        except Exception as e:
+            logger.error(f"Error processing content specifications: {str(e)}")
+            raise
+
+    def _process_file_specifications(
+        self,
+        file_specs: List[Dict[str, Any]],
+        index_type: str,
+        professor_username: str,
+        course_id: str,
+        assignment_title: str
+    ) -> Dict[str, Any]:
+        """
+        Process a list of file specifications into a single index.
+
+        Args:
+            file_specs: List of file specifications
+            index_type: "course_content" or "supporting_docs"
+            professor_username: Professor's username
+            course_id: Course identifier
+            assignment_title: Assignment title
+
+        Returns:
+            Dictionary with index creation results
+        """
+        try:
+            logger.info(
+                f"Processing {len(file_specs)} files for {index_type} index")
+
+            documents = []
+            extraction_results = []
+
+            # Process each file specification
+            for spec in file_specs:
+                try:
+                    file_key = spec.get("fileKey")
+                    file_name = spec.get("fileName")
+                    use_entire_document = spec.get("useEntireDocument", True)
+                    relevant_pages = spec.get("relevantPages")
+
+                    # Construct file URL from file key (backend handles this)
+                    bucket = self.s3_manager.config.s3_bucket
+                    file_url = f"{self.core.config.s3_endpoint}/{bucket}/{file_key}"
+
+                    logger.info(
+                        f"Processing {file_name} (entire: {use_entire_document})")
+                    logger.info(f"Constructed file URL: {file_url}")
+
+                    # Determine file extension for temporary file
+                    file_extension = file_name.lower().split(
+                        '.')[-1] if '.' in file_name else 'unknown'
+                    temp_suffix = f".{file_extension}"
+
+                    # Download file from S3 with correct extension
+                    with temporary_file(suffix=temp_suffix) as temp_file_path:
+                        self.s3_manager.download_file(file_key, temp_file_path)
+
+                        # Extract text based on file type and specifications
+                        if file_extension == 'txt':
+                            # TXT files don't support page ranges
+                            text, extraction_metadata = self.pdf_extractor.extract_text_from_file(
+                                temp_file_path, file_name)
+                            extraction_metadata["extraction_type"] = "entire_document"
+                            if not use_entire_document and relevant_pages:
+                                logger.warning(
+                                    f"Page ranges not supported for TXT files: {file_name}")
+                        elif use_entire_document or not relevant_pages:
+                            # Extract entire document (PDF/DOC/DOCX)
+                            text, extraction_metadata = self.pdf_extractor.extract_text_from_file(
+                                temp_file_path, file_name)
+                            extraction_metadata["extraction_type"] = "entire_document"
+                        else:
+                            # Extract specific pages (PDF only)
+                            text, extraction_metadata = self.pdf_extractor.extract_specific_pages(
+                                temp_file_path, relevant_pages
+                            )
+                            extraction_metadata["extraction_type"] = "specific_pages"
+                            extraction_metadata["requested_pages"] = relevant_pages
+
+                        # Create LlamaIndex document with enhanced metadata
+                        document = Document(
+                            text=text,
+                            metadata={
+                                "source_file": file_key,
+                                "file_name": file_name,
+                                "file_url": file_url,
+                                "professor_username": professor_username,
+                                "course_id": course_id,
+                                "assignment_title": assignment_title,
+                                "document_type": index_type,
+                                "use_entire_document": use_entire_document,
+                                "relevant_pages": relevant_pages,
+                                **extraction_metadata
+                            }
+                        )
+
+                        documents.append(document)
+                        extraction_results.append({
+                            "source_file": file_key,
+                            "file_name": file_name,
+                            "file_url": file_url,
+                            "extraction_metadata": extraction_metadata
+                        })
+
+                        logger.info(
+                            f"✅ Processed {file_name}: {len(text)} characters")
+
+                except Exception as e:
+                    logger.error(
+                        f"Failed to process {spec.get('fileName', 'unknown')}: {str(e)}")
+                    extraction_results.append({
+                        "source_file": spec.get("fileKey"),
+                        "file_name": spec.get("fileName"),
+                        "error": str(e)
+                    })
+                    continue
+
+            if not documents:
+                raise ValueError(
+                    f"No documents successfully processed for {index_type}")
+
+            # Create index from processed documents
+            cache_key = self.cache_manager.get_cache_key(
+                professor_username, course_id, f"{assignment_title}_{index_type}"
+            )
+
+            result = self._create_index_from_documents(
+                documents, cache_key, professor_username, course_id, assignment_title, index_type
+            )
+
+            result.update({
+                "index_type": index_type,
+                "total_documents": len(documents),
+                "extraction_results": extraction_results
+            })
+
+            return result
+
+        except Exception as e:
+            logger.error(
+                f"Error processing {index_type} specifications: {str(e)}")
+            raise

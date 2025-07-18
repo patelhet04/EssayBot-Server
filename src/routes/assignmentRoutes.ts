@@ -6,7 +6,7 @@ import {
 } from "../controllers/assignments/updateAssignment";
 import { createAssignment } from "../controllers/assignments/createAssignment";
 import { AssignmentParams } from "../controllers/assignments";
-import { createRubric } from "../controllers/assignments/generateRubric";
+import { createRubric, fillCriteriaExpectations } from "../controllers/assignments/generateRubric";
 
 const router = express.Router();
 
@@ -28,6 +28,11 @@ router.patch(
 router.post(
   "/generate-rubric",
   createRubric as unknown as RequestHandler<AssignmentParams>
+);
+
+router.post(
+  "/fill-expectations",
+  fillCriteriaExpectations as unknown as RequestHandler<AssignmentParams>
 );
 
 router.post(

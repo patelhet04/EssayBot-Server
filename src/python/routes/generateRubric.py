@@ -3,6 +3,7 @@ import json
 import logging
 import random
 import requests
+import re
 from typing import List, Dict, Any
 from flask import Flask, request, jsonify, Blueprint
 
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 rubric_bp = Blueprint("rubric", __name__)
 
 # Local LLM API configuration
-API_URL = "http://localhost:5001/api/generate"
+API_URL = os.getenv("OLLAMA_URL", "http://localhost:5001/api/generate")
 DEFAULT_TEMPERATURE = 0.3
 DEFAULT_TOP_P = 0.9
 DEFAULT_MAX_TOKENS = 4000
@@ -53,25 +54,32 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
     try:
         context_text = ' '.join(context)
         prompt = f"""
-        You are an expert educational assessment designer. Your task is to create a grading rubric that helps students understand what is important and assists graders in evaluating student answers for the following question/assignment.
+        You are an expert educational assessment designer. Your task is to create a grading rubric based ONLY on the assignment question and course content provided below.
 
-        To create an effective rubric, ensure that each criterion is:
-        1. **Specific and measurable**: Clearly define what is being assessed.
-        2. **Relevant to the question**: Directly relate to the key concepts or skills the question is testing.
-        3. **Distinct**: Each criterion should cover a unique aspect of the assignment.
-        4. **Comprehensive**: Together, the criteria should cover all important aspects of the assignment.
-
-        For example, a criterion might assess the depth of understanding of key concepts, with scoring levels that differentiate between exceptional, basic, and limited comprehension.
-
-        **QUESTION:**
+        **ASSIGNMENT QUESTION:**
         {question}
 
-        **RELEVANT CONTEXT FROM COURSE MATERIALS:**
+        **COURSE CONTENT (Textbooks, Lectures, Course Materials):**
         {context_text}
 
-        Create a sample grading rubric with 3-4 relevant criteria tailored to this specific question. Each criterion should include:
+        **RUBRIC CREATION INSTRUCTIONS:**
+        Create grading criteria based EXCLUSIVELY on:
+        1. **The assignment question requirements** - what specific knowledge/skills it's testing
+        2. **The course content provided** - the main learning materials for this course
+        
+        Do NOT use external knowledge or general essay writing criteria. Base your rubric entirely on what students should demonstrate based on the course materials and question requirements.
+
+        **CRITERIA REQUIREMENTS:**
+        Each criterion should be:
+        1. **Specific to this assignment question** - directly assess what the question is asking
+        2. **Grounded in course content** - evaluate understanding of the provided course materials
+        3. **Measurable and distinct** - clearly define different aspects of student performance
+        4. **Keep criteria separate** - do not combine multiple concepts into one criterion
+        5. **Concise** - criterion descriptions should be 40-50 words maximum
+
+        Create a grading rubric with 3-5 relevant criteria. Each criterion should include:
         1. A clear name
-        2. A detailed description
+        2. A detailed description based on course content expectations
         3. A weight (numerical value where all weights add up to 100)
         4. Scoring levels with descriptions for full, partial, and minimal performance
         5. An empty subCriteria array
@@ -82,19 +90,23 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
           "criteria": [
             {{
               "name": "Criterion Name",
-              "description": "Detailed description of what is being assessed",
+              "description": "Detailed description grounded in course content and question requirements",
               "weight": number,
               "scoringLevels": {{
-                "full": "Description of full points performance",
-                "partial": "Description of partial points performance",
-                "minimal": "Description of minimal points performance"
+                "full": "Description of full points performance based on course expectations",
+                "partial": "Description of partial points performance based on course expectations",
+                "minimal": "Description of minimal points performance based on course expectations"
               }},
               "subCriteria": []
             }}
           ]
         }}
 
-        Return ONLY the JSON object with no additional text before or after it.
+        **IMPORTANT:**
+        - Return ONLY the JSON object with no additional text before or after it
+        - Do NOT include labels like "Full Points:" or "Partial Points:" in the scoringLevels descriptions
+        - The descriptions should be the actual expectation text only
+        - Keep scoring level descriptions concise and specific
         """
         response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
                                      max_tokens=1000, model=model)
@@ -116,6 +128,20 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
                             "partial": "Satisfactory performance in this criterion.",
                             "minimal": "Minimal performance in this criterion."
                         }
+
+                    # Clean scoring levels to remove any labels
+                    if "scoringLevels" in criterion and isinstance(criterion["scoringLevels"], dict):
+                        def clean_text(text):
+                            if not text:
+                                return ""
+                            # Remove common labels that might be included
+                            return re.sub(r'^(Full Points?|Partial Points?|Minimal Points?):\s*', '', text, flags=re.IGNORECASE).strip()
+
+                        for level in ["full", "partial", "minimal"]:
+                            if level in criterion["scoringLevels"]:
+                                criterion["scoringLevels"][level] = clean_text(
+                                    criterion["scoringLevels"][level])
+
                     if "weight" not in criterion or not isinstance(criterion["weight"], (int, float)):
                         criterion["weight"] = 100 // len(
                             rubric_json["criteria"])
@@ -158,6 +184,79 @@ def generate_sample_rubric(question: str, context: List[str], model: str = "llam
         }
 
 
+def generate_criteria_expectations(criteria_name: str, criteria_description: str, question: str, context: List[str], bracket_labels: List[str], model: str = "llama3.3:70b") -> Dict[str, str]:
+    """Generate expectations for a single criterion based on its name and description, for arbitrary bracket labels."""
+    logger.info(
+        f"Generating expectations for criterion: {criteria_name} using model: {model}...")
+    try:
+        context_text = ' '.join(context)
+        # Dynamically build the bracket instructions
+        bracket_instructions = "\n".join([
+            f"{i+1}. **{label}**: What constitutes {label.lower()} performance for this criterion" for i, label in enumerate(bracket_labels)
+        ])
+        bracket_json = ",\n".join(
+            [f'  "{label}": "Description for {label} performance"' for label in bracket_labels])
+        prompt = f"""
+        You are an expert educational assessment designer. Your task is to generate specific expectations for a grading criterion.
+
+        **CRITERION DETAILS:**
+        Name: {criteria_name}
+        Description: {criteria_description}
+
+        **EXPECTATIONS GENERATION INSTRUCTIONS:**
+        Based ONLY on the criterion name and description above, generate expectations for each of the following marks brackets:
+{bracket_instructions}
+
+        **REQUIREMENTS:**
+        - Focus EXCLUSIVELY on the specific criterion (name and description)
+        - Do NOT reference the assignment question or course content
+        - Be specific and measurable for the criterion being assessed
+        - Use clear, academic language
+        - **Keep expectations SHORT and PRECISE - maximum 10-15 words each**
+        - Focus on key performance indicators for this specific criterion only
+        - Avoid verbose descriptions
+
+        Return ONLY a JSON object with the following structure:
+        {{
+{bracket_json}
+        }}
+
+        **IMPORTANT:**
+        - Return ONLY the JSON object with no additional text before or after it
+        - Do NOT include labels like "Full Points:" or similar in the descriptions
+        - The descriptions should be the actual expectation text only
+        - Keep each description short and precise (10-15 words maximum)
+        - Focus ONLY on the criterion, not the assignment topic
+        """
+        response = send_post_request(prompt=prompt, temperature=0.3, top_p=0.1,
+                                     max_tokens=800, model=model)
+        response = response.strip()
+        json_start = response.find('{')
+        json_end = response.rfind('}') + 1
+        if json_start != -1 and json_end > json_start:
+            json_str = response[json_start:json_end]
+            try:
+                expectations_json = json.loads(json_str)
+                # Ensure all required fields are present
+                for label in bracket_labels:
+                    if label not in expectations_json or not expectations_json[label]:
+                        expectations_json[label] = f"Default {label} expectation for {criteria_name}"
+                logger.info(
+                    f"Successfully generated expectations for criterion: {criteria_name}")
+                return expectations_json
+            except json.JSONDecodeError as e:
+                logger.error(
+                    f"Error parsing JSON from model response: {str(e)}")
+                raise
+        else:
+            logger.error("Could not find valid JSON in model response")
+            raise ValueError("No valid JSON found in response")
+    except Exception as e:
+        logger.error(
+            f"Error generating expectations for criterion {criteria_name}: {str(e)}")
+        return {label: f"Default {label} expectation for {criteria_name}" for label in bracket_labels}
+
+
 @rubric_bp.route("/generate_rubric", methods=["POST"])
 def generate_rubric():
     data = request.get_json()
@@ -172,15 +271,15 @@ def generate_rubric():
         return jsonify({"error": "question, username, and courseId are required"}), 400
 
     try:
-        # Retrieve context from the FAISS index
+        # Retrieve comprehensive context from the FAISS index for rubric generation
         context = retrieve_relevant_text(
             query=question,
-            k=5,
+            k=30,  # Get many more chunks for comprehensive rubric coverage
             professor_username=professor,
             course_id=course_id,
             assignmentTitle=title,
-            distance_threshold=0.5,
-            max_total_length=6000
+            distance_threshold=0.3,  # Lower threshold to include more content
+            max_total_length=12000  # Double the context length for rubrics
         )
 
         # Generate a single rubric
@@ -198,5 +297,49 @@ def generate_rubric():
         return jsonify({
             "success": False,
             "message": f"Error generating sample rubric: {str(e)}",
+            "error": str(e)
+        }), 500
+
+
+@rubric_bp.route("/fill_expectations", methods=["POST"])
+def fill_expectations():
+    data = request.get_json()
+    print(data)
+    criteria_name = data.get("criteriaName")
+    criteria_description = data.get("criteriaDescription")
+    question = data.get("question")
+    professor = data.get("username")
+    title = data.get("title")
+    course_id = data.get("courseId")
+    model = data.get("model", "llama3.3:70b")
+    bracket_labels = data.get("bracketLabels")
+    if not all([criteria_name, criteria_description, question, professor, course_id, title, bracket_labels]):
+        return jsonify({"error": "criteriaName, criteriaDescription, question, username, courseId, and bracketLabels are required"}), 400
+    try:
+        # Retrieve relevant context from the FAISS index
+        context = retrieve_relevant_text(
+            query=f"{criteria_name} {criteria_description}",
+            k=20,
+            professor_username=professor,
+            course_id=course_id,
+            assignmentTitle=title,
+            distance_threshold=0.4,
+            max_total_length=8000
+        )
+        # Generate expectations for the criterion and all brackets
+        expectations = generate_criteria_expectations(
+            criteria_name, criteria_description, question, context, bracket_labels, model=model
+        )
+        result = {
+            "success": True,
+            "message": "Generated expectations successfully",
+            "expectations": expectations
+        }
+        return jsonify(result)
+    except Exception as e:
+        logger.exception(f"Error generating expectations: {str(e)}")
+        return jsonify({
+            "success": False,
+            "message": f"Error generating expectations: {str(e)}",
             "error": str(e)
         }), 500
